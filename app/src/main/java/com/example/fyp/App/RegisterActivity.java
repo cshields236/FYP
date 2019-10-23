@@ -22,20 +22,36 @@ import com.google.firebase.auth.FirebaseUser;
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    EditText emailtxt;
+    EditText passwordtxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
 
+        emailtxt = findViewById(R.id.rEmail);
+        final String email = emailtxt.getText().toString();
         mAuth = FirebaseAuth.getInstance();
 
         TextView tvSignIn = findViewById(R.id.rLink);
         tvSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(RegisterActivity.this, LogInActivity.class);
-                startActivity(i);
+
+
+                if (!email.isEmpty()) {
+                    Intent i = new Intent(RegisterActivity.this, LogInActivity.class);
+                    startActivity(i);
+
+                    i.putExtra("email", email);
+
+                } else {
+                    Intent i = new Intent(RegisterActivity.this, LogInActivity.class);
+                    startActivity(i);
+                }
+
+
             }
         });
 
@@ -43,11 +59,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void register(View view) {
 
-        final EditText emailtxt = findViewById(R.id.rEmail);
-        final EditText passwordtxt = findViewById(R.id.rPassword);
-
-
-
+        emailtxt = findViewById(R.id.rEmail);
+        passwordtxt = findViewById(R.id.rPassword);
 
 
         String email = emailtxt.getText().toString();
@@ -75,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
+
                                 Log.d("", "createUserWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
 
@@ -96,8 +109,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
     }
-
-
 
 
 }

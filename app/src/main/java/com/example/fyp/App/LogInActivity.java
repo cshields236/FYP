@@ -24,26 +24,54 @@ public class LogInActivity extends AppCompatActivity {
     FirebaseAuth mFirebaseAuth;
     public FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseAuth mAuth;
-
+    EditText emailtxt;
+    EditText passwordtxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+        Intent i = getIntent();
+
+        if (i == null){
+            String e = i.getStringExtra("email");
+            emailtxt.setText(e);
+
+            TextView register = findViewById(R.id.lLink);
 
 
+            register.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(LogInActivity.this, RegisterActivity.class);
+                    startActivity(i);
+                }
+            });
+        }
+        else {
 
 
+            TextView register = findViewById(R.id.lLink);
+
+
+            register.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(LogInActivity.this, RegisterActivity.class);
+                    startActivity(i);
+                }
+            });
+        }
 
     }
 
-    public void signIn(View view){
+    public void signIn(View view) {
         mAuth = FirebaseAuth.getInstance();
 
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-        final EditText emailtxt = findViewById(R.id.lEmail);
-        final EditText passwordtxt = findViewById(R.id.lPassword);
+        emailtxt = findViewById(R.id.lEmail);
+        passwordtxt =findViewById(R.id.lPassword);
 
         String email = emailtxt.getText().toString();
         String password = passwordtxt.getText().toString();
@@ -51,14 +79,13 @@ public class LogInActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
 
                     Log.d("", "signInWithEmail:success");
                     FirebaseUser user = mAuth.getCurrentUser();
 
                     startActivity(new Intent(LogInActivity.this, MainActivity.class));
-                }
-                else{
+                } else {
                     Log.w("", "signInWithEmail:failure", task.getException());
                 }
                 Toast.makeText(LogInActivity.this, "Authentication failed." + task.getException().getMessage(),
