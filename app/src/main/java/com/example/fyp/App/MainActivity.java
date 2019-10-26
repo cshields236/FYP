@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -32,6 +34,13 @@ import com.wonderkiln.camerakit.CameraKitImage;
 import com.wonderkiln.camerakit.CameraKitVideo;
 import com.wonderkiln.camerakit.CameraView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
     Button btnDetect;
 
 
-    AlertDialog waitingDialog ;
+    AlertDialog waitingDialog;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -66,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //initializing view
-        cameraView =  findViewById(R.id.camera_view);
-        graphicOverlay =  findViewById(R.id.graphic_overlay);
-        btnDetect =  findViewById(R.id.btn_detect);
+        cameraView = findViewById(R.id.camera_view);
+        graphicOverlay = findViewById(R.id.graphic_overlay);
+        btnDetect = findViewById(R.id.btn_detect);
 
         cameraView.setFacing(CameraKit.Constants.FACING_FRONT);
 
@@ -97,16 +107,22 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-                public void onImage(CameraKitImage cameraKitImage) {
-                    waitingDialog.show();
+            public void onImage(CameraKitImage cameraKitImage) {
+                waitingDialog.show();
 
-                    Bitmap bitmap = cameraKitImage.getBitmap();
-                    bitmap = Bitmap.createScaledBitmap(bitmap,cameraView.getWidth(), cameraView.getHeight(), false);
-                    cameraView.stop();
+                Bitmap bitmap = cameraKitImage.getBitmap();
+                bitmap = Bitmap.createScaledBitmap(bitmap, cameraView.getWidth(), cameraView.getHeight(), false);
+                cameraView.stop();
 
+
+                try {
                     runFaceDetector(bitmap);
-
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+            }
 
             @Override
             public void onVideo(CameraKitVideo cameraKitVideo) {
@@ -116,21 +132,35 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
     }
 
-    private void runFaceDetector(Bitmap bitmap) {
+
+
+
+
+    private void runFaceDetector(Bitmap bitmap) throws JSONException, IOException {
 
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
 
-        FirebaseVisionFaceDetectorOptions options = new FirebaseVisionFaceDetectorOptions.Builder().build();
+        FirebaseVisionFaceDetectorOptions options =
+                new FirebaseVisionFaceDetectorOptions.Builder()
+                        .setPerformanceMode(FirebaseVisionFaceDetectorOptions.ACCURATE)
+                        .setLandmarkMode(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
+                        .setClassificationMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+                        .build();
 
         FirebaseVisionFaceDetector detector = FirebaseVision.getInstance().getVisionFaceDetector(options);
 
         detector.detectInImage(image).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
             @Override
             public void onSuccess(List<FirebaseVisionFace> firebaseVisionFaces) {
-                processFaceResult(firebaseVisionFaces);
+                try {
+                    processFaceResult(firebaseVisionFaces);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -141,23 +171,51 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void processFaceResult(List<FirebaseVisionFace> firebaseVisionFaces) {
-
+    private void processFaceResult(List<FirebaseVisionFace> firebaseVisionFaces) throws JSONException, IOException {
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("faces.json", Context.MODE_APPEND));
+        JSONArray facesObjs = new JSONArray();
         int count = 0;
-        for(FirebaseVisionFace face : firebaseVisionFaces)
-        {
+        for (FirebaseVisionFace face : firebaseVisionFaces) {
             Rect bounds = face.getBoundingBox();
+            Log.d("Face: ", face.toString());
+
+            JSONObject faceObj = new JSONObject();
+            faceObj.put("rightEyeOpen", face.getRightEyeOpenProbability());
+            faceObj.put("leftEyeOpen", face.getLeftEyeOpenProbability());
+            faceObj.put("smileProbability", face.getSmilingProbability());
+            faceObj.put("headSlantX", face.getHeadEulerAngleY());
+            faceObj.put("headSlantZ", face.getHeadEulerAngleZ());
+
+
+
+            facesObjs.put(faceObj);
+
 
             RectOverlay rect = new RectOverlay(graphicOverlay, bounds);
             graphicOverlay.add(rect);
 
             count++;
+
+            try {
+
+                outputStreamWriter.write(String.valueOf(facesObjs.get(count - 1 )));
+                outputStreamWriter.close();
+                Log.d("", "File Written" );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
         waitingDialog.dismiss();
-        Toast.makeText(this, String.format("Detected %d faces", count++), Toast.LENGTH_LONG).show();
 
 
-        ArrayList<FirebaseVisionFace>faces = new ArrayList();
+        if (firebaseVisionFaces.get(count - 1).getSmilingProbability() > .75) {
+            Toast.makeText(this, String.format("Detected %d smiling faces", count++), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, String.format("Detected %d non-smiling faces", count++), Toast.LENGTH_LONG).show();
+        }
+
+        ArrayList<FirebaseVisionFace> faces = new ArrayList();
 
         for (FirebaseVisionFace face : faces) {
             Rect bounds = face.getBoundingBox();

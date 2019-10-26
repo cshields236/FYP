@@ -78,7 +78,7 @@ public class LogInActivity extends AppCompatActivity {
 
         String email = emailtxt.getText().toString();
         String password = passwordtxt.getText().toString();
-       // waiting = new SpotsDialog.Builder().setContext(this).setMessage("Logging In").setCancelable(false).build();
+        // waiting = new SpotsDialog.Builder().setContext(this).setMessage("Logging In").setCancelable(false).build();
         if (email.isEmpty()) {
 
             emailtxt.setError("Please enter an email");
