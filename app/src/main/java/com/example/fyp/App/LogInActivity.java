@@ -3,6 +3,7 @@ package com.example.fyp.App;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import dmax.dialog.SpotsDialog;
+
 public class LogInActivity extends AppCompatActivity {
 
     FirebaseAuth mFirebaseAuth;
@@ -26,6 +29,7 @@ public class LogInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     EditText emailtxt;
     EditText passwordtxt;
+    AlertDialog waiting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,7 @@ public class LogInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_log_in);
         Intent i = getIntent();
 
-        if (i == null){
+        if (i == null) {
             String e = i.getStringExtra("email");
             emailtxt.setText(e);
 
@@ -47,8 +51,7 @@ public class LogInActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
-        }
-        else {
+        } else {
 
 
             TextView register = findViewById(R.id.lLink);
@@ -71,28 +74,42 @@ public class LogInActivity extends AppCompatActivity {
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         emailtxt = findViewById(R.id.lEmail);
-        passwordtxt =findViewById(R.id.lPassword);
+        passwordtxt = findViewById(R.id.lPassword);
 
         String email = emailtxt.getText().toString();
         String password = passwordtxt.getText().toString();
+       // waiting = new SpotsDialog.Builder().setContext(this).setMessage("Logging In").setCancelable(false).build();
+        if (email.isEmpty()) {
 
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
+            emailtxt.setError("Please enter an email");
+            emailtxt.requestFocus();
+        } else if (password.isEmpty()) {
+            passwordtxt.setError("Please enter password");
+            passwordtxt.requestFocus();
+        } else if (email.isEmpty() && password.isEmpty()) {
+            Toast.makeText(LogInActivity.this, "Please Enter an Email and Password to Sign In", Toast.LENGTH_LONG).show();
+        } else if (!((email.isEmpty() && password.isEmpty()))) {
 
-                    Log.d("", "signInWithEmail:success");
-                    FirebaseUser user = mAuth.getCurrentUser();
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
 
-                    startActivity(new Intent(LogInActivity.this, MainActivity.class));
-                } else {
-                    Log.w("", "signInWithEmail:failure", task.getException());
+                        Log.d("", "signInWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+
+                        startActivity(new Intent(LogInActivity.this, MainActivity.class));
+                    } else {
+                        Log.w("", "signInWithEmail:failure", task.getException());
+                        Toast.makeText(LogInActivity.this, "Authentication failed." + task.getException().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }
+
                 }
-                Toast.makeText(LogInActivity.this, "Authentication failed." + task.getException().getMessage(),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
 
+            });
+        }
     }
 
 }

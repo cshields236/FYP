@@ -35,21 +35,15 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         TextView tvSignIn = findViewById(R.id.rLink);
+
+
         tvSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-                if (!email.isEmpty()) {
-                    Intent i = new Intent(RegisterActivity.this, LogInActivity.class);
-                    startActivity(i);
-
-                    i.putExtra("email", email);
-
-                } else {
-                    Intent i = new Intent(RegisterActivity.this, LogInActivity.class);
-                    startActivity(i);
-                }
+                Intent i = new Intent(RegisterActivity.this, LogInActivity.class);
+                startActivity(i);
 
 
             }
