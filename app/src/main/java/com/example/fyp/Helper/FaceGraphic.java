@@ -19,7 +19,7 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
     private static final float BOX_STROKE_WIDTH = 5.0f;
 
     private static final int[] COLOR_CHOICES = {
-            Color.BLUE //, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.RED, Color.WHITE, Color.YELLOW
+            Color.RED
     };
     private static int currentColorIndex = 0;
 
@@ -89,22 +89,11 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
                     x + ID_X_OFFSET * 6,
                     y,
                     idPaint);
-        } else {
-            canvas.drawText(
-                    "left eye: " + String.format("%.2f", face.getLeftEyeOpenProbability()),
-                    x - ID_X_OFFSET,
-                    y,
-                    idPaint);
-            canvas.drawText(
-                    "right eye: " + String.format("%.2f", face.getRightEyeOpenProbability()),
-                    x + ID_X_OFFSET * 6,
-                    y,
-                    idPaint);
         }
 
         // Draws a bounding box around the face.
-        float xOffset = scaleX(face.getBoundingBox().width() / 2.0f);
-        float yOffset = scaleY(face.getBoundingBox().height() / 2.0f);
+        float xOffset = scaleX(face.getBoundingBox().width() );
+        float yOffset = scaleY(face.getBoundingBox().height() );
         float left = x - xOffset;
         float top = y - yOffset;
         float right = x + xOffset;

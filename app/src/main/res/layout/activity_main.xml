@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,26 +8,32 @@
     tools:context=".App.AppFunctionality">
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:text="Finish" />
+        android:id="@+id/btnFinish"
+        android:layout_width="191dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="16dp"
+        android:text="Finish"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_detect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="190dp"
+        android:layout_height="52dp"
         android:layout_alignParentBottom="true"
-        android:text="Start Journey" />
+        android:layout_marginStart="7dp"
+        android:text="Start Journey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnFinish" />
 
     <com.example.fyp.Helper.CameraSourcePreview
         android:id="@+id/firePreview"
-        android:layout_width="wrap_content"
-        android:layout_height="697dp"
+        android:layout_width="455dp"
+        android:layout_height="383dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="34dp">
+        android:layout_marginTop="151dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.example.fyp.Helper.GraphicOverlay
             android:id="@+id/graphic_overlay"
@@ -37,5 +44,4 @@
             />
     </com.example.fyp.Helper.CameraSourcePreview>
 
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

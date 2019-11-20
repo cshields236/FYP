@@ -42,16 +42,35 @@ public class AppFunctionality extends AppCompatActivity {
         if (preview == null) {
             Log.d(TAG, "Preview is null");
         }
-        graphicOverlay =  findViewById(R.id.graphic_overlay);
+        graphicOverlay = findViewById(R.id.graphic_overlay);
         if (graphicOverlay == null) {
             Log.d(TAG, "graphicOverlay is null");
         }
+        final Button cancel = findViewById(R.id.btnFinish);
+        cancel.setClickable(false);
+        final Button start = findViewById(R.id.btn_detect);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancel.setClickable(true);
+              //  start.setClickable(false);
+                if (allPermissionsGranted()) {
+                    createCameraSource();
+                } else {
+                    getRuntimePermissions();
+                }
+            }
+        });
 
-        if (allPermissionsGranted()) {
-            createCameraSource();
-        } else {
-            getRuntimePermissions();
-        }
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraSource.stop();
+                graphicOverlay.clear();
+                start.setClickable(true);
+            }
+        });
+
     }
 
     public void createCameraSource() {
@@ -59,7 +78,7 @@ public class AppFunctionality extends AppCompatActivity {
         cameraSource = new CameraSource(this, graphicOverlay);
 
         cameraSource.setMachineLearningFrameProcessor(new MainActivity());
-
+        cameraSource.setFacing(CameraSource.CAMERA_FACING_FRONT);
         startCameraSource();
     }
 

@@ -11,14 +11,12 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
 
 import java.nio.ByteBuffer;
-import java.util.concurrent.atomic.AtomicBoolean;
+
 
 
 public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
 
-    // Whether we should ignore process(). This is usually caused by feeding input data faster than
-    // the model can handle.
-    private final AtomicBoolean shouldThrottle = new AtomicBoolean(false);
+
 
     public VisionProcessorBase() {
     }
@@ -27,9 +25,7 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
     public void process(
             ByteBuffer data, final FrameMetadata frameMetadata, final GraphicOverlay
             graphicOverlay) {
-        if (shouldThrottle.get()) {
-            return;
-        }
+
         FirebaseVisionImageMetadata metadata =
                 new FirebaseVisionImageMetadata.Builder()
                         .setFormat(FirebaseVisionImageMetadata.IMAGE_FORMAT_NV21)
@@ -46,9 +42,7 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
     @Override
     public void process(Bitmap bitmap, final GraphicOverlay
             graphicOverlay) {
-        if (shouldThrottle.get()) {
-            return;
-        }
+
         detectInVisionImage(FirebaseVisionImage.fromBitmap(bitmap), null, graphicOverlay);
     }
 
@@ -59,9 +53,7 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
      */
     @Override
     public void process(Image image, int rotation, final GraphicOverlay graphicOverlay) {
-        if (shouldThrottle.get()) {
-            return;
-        }
+
         // This is for overlay display's usage
         FrameMetadata frameMetadata =
                 new FrameMetadata.Builder().setWidth(image.getWidth()).setHeight(image.getHeight
@@ -80,7 +72,6 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
                         new OnSuccessListener<T>() {
                             @Override
                             public void onSuccess(T results) {
-                                shouldThrottle.set(false);
                                 VisionProcessorBase.this.onSuccess(results, metadata,
                                         graphicOverlay);
                             }
@@ -89,13 +80,10 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
                         new OnFailureListener() {
                             @Override
                             public void onFailure( Exception e) {
-                                shouldThrottle.set(false);
                                 VisionProcessorBase.this.onFailure(e);
                             }
                         });
-        // Begin throttling until this frame of input has been processed, either in onSuccess or
-        // onFailure.
-        shouldThrottle.set(true);
+
     }
 
     @Override

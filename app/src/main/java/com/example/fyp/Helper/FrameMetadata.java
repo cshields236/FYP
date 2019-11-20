@@ -29,7 +29,7 @@ public class FrameMetadata {
         cameraFacing = facing;
     }
 
-    /** Builder of {@link FrameMetadata}. */
+
     public static class Builder {
 
         private int width;

@@ -64,6 +64,7 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
             FaceGraphic faceGraphic = new FaceGraphic(graphicOverlay);
             graphicOverlay.add(faceGraphic);
             faceGraphic.updateFace(face, frameMetadata.getCameraFacing());
+            Log.d(TAG, "onSuccess: " + face.toString());
         }
     }
 
