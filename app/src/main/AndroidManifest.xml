@@ -9,8 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".App.MainActivity"></activity>
-        <activity android:name=".App.RegisterActivity" />
+        <activity android:name=".App.AppFunctionality"></activity>
+
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"

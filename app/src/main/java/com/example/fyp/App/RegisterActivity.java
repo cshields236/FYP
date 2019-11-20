@@ -64,7 +64,6 @@ public class RegisterActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if (email.isEmpty()) {
-
             emailtxt.setError("Please enter an email");
             emailtxt.requestFocus();
         } else if (pw.isEmpty()) {
@@ -106,5 +105,3 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 }
-
-
