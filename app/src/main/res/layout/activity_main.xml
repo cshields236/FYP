@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,31 +7,30 @@
     android:layout_height="match_parent"
     tools:context=".App.AppFunctionality">
 
-    <Button
-        android:id="@+id/btnFinish"
-        android:layout_width="191dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="16dp"
-        android:text="Finish"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_detect"
-        android:layout_width="190dp"
-        android:layout_height="52dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="7dp"
-        android:text="Start Journey"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnFinish" />
+        android:layout_marginBottom="15dp"
+        android:text="Start Journey" />
+
+    <Button
+        android:id="@+id/btnFinish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Finish" />
 
     <com.example.fyp.Helper.CameraSourcePreview
         android:id="@+id/firePreview"
-        android:layout_width="455dp"
-        android:layout_height="383dp"
+        android:layout_width="233dp"
+        android:layout_height="389dp"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="151dp"
+        android:layout_marginStart="89dp"
+        android:layout_marginTop="164dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -44,4 +43,4 @@
             />
     </com.example.fyp.Helper.CameraSourcePreview>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

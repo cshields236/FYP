@@ -89,15 +89,27 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
                     x + ID_X_OFFSET * 6,
                     y,
                     idPaint);
+        } else {
+            canvas.drawText(
+                    "left eye: " + String.format("%.2f", face.getLeftEyeOpenProbability()),
+                    x - ID_X_OFFSET,
+                    y,
+                    idPaint);
+            canvas.drawText(
+                    "right eye: " + String.format("%.2f", face.getRightEyeOpenProbability()),
+                    x + ID_X_OFFSET * 6,
+                    y,
+                    idPaint);
         }
 
         // Draws a bounding box around the face.
-        float xOffset = scaleX(face.getBoundingBox().width() );
-        float yOffset = scaleY(face.getBoundingBox().height() );
-        float left = x - xOffset;
-        float top = y - yOffset;
-        float right = x + xOffset;
-        float bottom = y + yOffset;
+        float xOffset = scaleX(face.getBoundingBox().width() / 2.0f);
+        float yOffset = scaleY(face.getBoundingBox().height() / 2.0f);
+        float left = x - xOffset /1.5f;
+        float top = y - yOffset ;
+        float right = x + xOffset / 1.5f;
+        float bottom = y + yOffset /1.5f;
         canvas.drawRect(left, top, right, bottom, boxPaint);
     }
 }
+

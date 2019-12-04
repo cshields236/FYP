@@ -1,7 +1,9 @@
 package com.example.fyp.Helper;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -66,19 +68,36 @@ public class CameraSourcePreview extends ViewGroup {
         }
     }
 
-    @SuppressLint("MissingPermission")
     private void startIfReady() throws IOException {
         if (startRequested && surfaceAvailable) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+            }
             cameraSource.start(surfaceView.getHolder());
             if (overlay != null) {
                 Size size = cameraSource.getPreviewSize();
                 int min = Math.min(size.getWidth(), size.getHeight());
                 int max = Math.max(size.getWidth(), size.getHeight());
-
+                if (isPortraitMode()) {
+                    // Swap width and height sizes when in portrait, since it will be rotated by
+                    // 90 degrees
+                    overlay.setCameraInfo(min, max, cameraSource.getCameraFacing());
+                } else {
+                    overlay.setCameraInfo(max, min, cameraSource.getCameraFacing());
+                }
                 overlay.clear();
             }
             startRequested = false;
         }
+    }
+
+    private boolean isPortraitMode() {
+
+        return true;
+    }
+
+    private int checkSelfPermission(String camera) {
+        return 0;
     }
 
     private class SurfaceCallback implements SurfaceHolder.Callback {
@@ -103,8 +122,8 @@ public class CameraSourcePreview extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int width = 600;
-        int height = 500;
+        int width = 2500;
+        int height = 1500;
         if (cameraSource != null) {
             Size size = cameraSource.getPreviewSize();
             if (size != null) {
@@ -114,6 +133,11 @@ public class CameraSourcePreview extends ViewGroup {
         }
 
         // Swap width and height sizes when in portrait, since it will be rotated 90 degrees
+        if (isPortraitMode()) {
+            int tmp = width;
+            width = height;
+            height = tmp;
+        }
 
         final int layoutWidth = right - left;
         final int layoutHeight = bottom - top;

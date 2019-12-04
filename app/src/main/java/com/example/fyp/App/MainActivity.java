@@ -1,5 +1,6 @@
 package com.example.fyp.App;
 
+import android.graphics.Rect;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -7,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.example.fyp.Helper.FaceGraphic;
 import com.example.fyp.Helper.FrameMetadata;
 import com.example.fyp.Helper.GraphicOverlay;
+import com.example.fyp.Helper.RectOverlay;
 import com.example.fyp.Helper.VisionProcessorBase;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.FirebaseVision;
@@ -59,7 +61,10 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
           FrameMetadata frameMetadata,
             GraphicOverlay graphicOverlay) {
         graphicOverlay.clear();
+
+
         for (int i = 0; i < faces.size(); ++i) {
+
             FirebaseVisionFace face = faces.get(i);
             FaceGraphic faceGraphic = new FaceGraphic(graphicOverlay);
             graphicOverlay.add(faceGraphic);
