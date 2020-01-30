@@ -11,6 +11,10 @@ import com.example.fyp.Helper.GraphicOverlay;
 import com.example.fyp.Helper.RectOverlay;
 import com.example.fyp.Helper.VisionProcessorBase;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
@@ -18,11 +22,15 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>>    {
 
     private static final String TAG = "FaceDetectionProcessor";
 
+    private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private final FirebaseVisionFaceDetector detector;
 
     public MainActivity() {
@@ -69,7 +77,21 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
             FaceGraphic faceGraphic = new FaceGraphic(graphicOverlay);
             graphicOverlay.add(faceGraphic);
             faceGraphic.updateFace(face, frameMetadata.getCameraFacing());
-            Log.d(TAG, "onSuccess: " + face.toString());
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            Date date = new Date();
+            String time = sdf.format(date);
+           // Log.d(TAG, "onSuccess: " + face.toString() + user.getEmail() + time);
+
+
+            DriverFace driverFace = new DriverFace();
+            driverFace.setName(user.getEmail());
+            driverFace.setTime(time);
+            driverFace.setLeftEye(face.getLeftEyeOpenProbability());
+            driverFace.setRightEye(face.getRightEyeOpenProbability());
+
+
+            Log.d(TAG, "onSuccess: " + driverFace.toString());
+
         }
     }
 

@@ -17,6 +17,8 @@ import com.example.fyp.Helper.CameraSourcePreview;
 import com.example.fyp.Helper.GraphicOverlay;
 import com.example.fyp.R;
 import com.example.fyp.Helper.CameraSource;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 import java.io.IOException;
@@ -160,4 +162,6 @@ public class AppFunctionality extends AppCompatActivity {
         Log.i(TAG, "Permission NOT granted: " + permission);
         return false;
     }
+
+
 }
