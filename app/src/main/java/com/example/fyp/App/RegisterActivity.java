@@ -117,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 u1.setEmail(email);
 
 
-                                // Add a new document with a generated ID
+                                // Add a new document with ID from the Authenticator
                                 db.collection("users").document(u.getUid())
                                         .set(u1).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override

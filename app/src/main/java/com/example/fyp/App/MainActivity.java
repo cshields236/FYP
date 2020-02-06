@@ -1,6 +1,7 @@
 package com.example.fyp.App;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -10,9 +11,14 @@ import com.example.fyp.Helper.FaceGraphic;
 import com.example.fyp.Helper.FrameMetadata;
 import com.example.fyp.Helper.GraphicOverlay;
 import com.example.fyp.Helper.VisionProcessorBase;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
@@ -25,17 +31,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>>    {
+
+public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> {
 
     private static final String TAG = "FaceDetectionProcessor";
 
     private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private final FirebaseVisionFaceDetector detector;
+    private FirebaseAuth mAuth;
+    private Journey journey;
+    ArrayList<JourneyInformation> infos = new ArrayList<JourneyInformation>();
 
-
-    ArrayList <JourneyInformation>  infos = new ArrayList<JourneyInformation>();
-
-
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public MainActivity() {
         FirebaseVisionFaceDetectorOptions options = new FirebaseVisionFaceDetectorOptions.Builder()
@@ -69,14 +76,13 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
 
     @Override
     protected void onSuccess(
-           List<FirebaseVisionFace> faces,
-          FrameMetadata frameMetadata,
+            List<FirebaseVisionFace> faces,
+            FrameMetadata frameMetadata,
             GraphicOverlay graphicOverlay) {
         graphicOverlay.clear();
 
 
         for (int i = 0; i < faces.size(); ++i) {
-
             FirebaseVisionFace face = faces.get(i);
             // Declaring and adding the graphic overlay to the screen
             FaceGraphic faceGraphic = new FaceGraphic(graphicOverlay);
@@ -84,7 +90,8 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
             //updating the graphic overlay every time a face is detected in order to track the face in real time
             faceGraphic.updateFace(face, frameMetadata.getCameraFacing());
             //Get the current user that's logged in
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
             Date date = new Date();
             String time = sdf.format(date);
 
@@ -99,15 +106,35 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
             infos.add(information);
 
 
-
-            Journey journey = new Journey();
-            journey.setJourneyInformationss(infos);
-
-            Log.d(TAG, "onSuccess: " + journey.toString());
-
-
-
         }
+
+        journey = new Journey();
+        journey.setJourneyInformationss(infos);
+
+        Log.d(TAG, "onSuccess: " + journey.toString());
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference ref = db.collection("users").document(user.getUid());
+
+
+        ref.collection("Journeys").add(journey)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: ");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+
+
+        Log.d(TAG, "onComplete: " + "created");
+
     }
 
     @Override
