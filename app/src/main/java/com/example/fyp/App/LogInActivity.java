@@ -29,7 +29,7 @@ public class LogInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     EditText emailtxt;
     EditText passwordtxt;
-    AlertDialog waiting;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

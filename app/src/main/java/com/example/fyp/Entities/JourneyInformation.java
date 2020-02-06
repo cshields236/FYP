@@ -1,6 +1,6 @@
-package com.example.fyp.App;
+package com.example.fyp.Entities;
 
-public class DriverFace {
+public class JourneyInformation {
     private String name;
     private String time;
     private double leftEye;
@@ -8,11 +8,11 @@ public class DriverFace {
 
 
 
-    public DriverFace() {
+    public JourneyInformation() {
     }
 
 
-    public DriverFace(String name, String time, double leftEye, double rightEye) {
+    public JourneyInformation(String name, String time, double leftEye, double rightEye) {
         this.name = name;
         this.time = time;
         this.leftEye = leftEye;
@@ -54,7 +54,7 @@ public class DriverFace {
 
     @Override
     public String toString() {
-        return "DriverFace{" +
+        return "JourneyInfo{" +
                 "name='" + name + '\'' +
                 ", time='" + time + '\'' +
                 ", leftEye=" + leftEye +

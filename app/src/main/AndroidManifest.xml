@@ -10,8 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".App.AppFunctionality"></activity>
-
-
+        <activity android:name=".App.RegisterActivity"></activity>
+        <activity android:name=".App.MainActivity"></activity>
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="face" />
