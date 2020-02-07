@@ -1,7 +1,6 @@
 package com.example.fyp.App;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -36,7 +35,7 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
 
     private static final String TAG = "FaceDetectionProcessor";
 
-    private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private final FirebaseVisionFaceDetector detector;
     private FirebaseAuth mAuth;
     private Journey journey;
@@ -114,11 +113,12 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
         Log.d(TAG, "onSuccess: " + journey.toString());
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+        Date date = new Date();
+        String time = sdf.format(date);
         DocumentReference ref = db.collection("users").document(user.getUid());
+        CollectionReference ref1 = ref.collection(time);
 
-
-        ref.collection("Journeys").add(journey)
+        ref1.add(journey)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {

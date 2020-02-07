@@ -71,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
         final String email = emailtxt.getText().toString();
         String pw = passwordtxt.getText().toString();
         final String fname = fNametxt.getText().toString();
-        final String lname = fNametxt.getText().toString();
+        final String lname = lNametxt.getText().toString();
         mAuth = FirebaseAuth.getInstance();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();

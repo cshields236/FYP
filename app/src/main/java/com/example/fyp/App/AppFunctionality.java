@@ -8,21 +8,33 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.fyp.Entities.Journey;
 import com.example.fyp.Helper.CameraSourcePreview;
 import com.example.fyp.Helper.GraphicOverlay;
 import com.example.fyp.R;
 import com.example.fyp.Helper.CameraSource;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AppFunctionality extends AppCompatActivity {
@@ -31,6 +43,10 @@ public class AppFunctionality extends AppCompatActivity {
     private CameraSource cameraSource = null;
     private CameraSourcePreview preview;
     private GraphicOverlay graphicOverlay;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,13 +64,41 @@ public class AppFunctionality extends AppCompatActivity {
         if (graphicOverlay == null) {
             Log.d(TAG, "graphicOverlay is null");
         }
-        final Button cancel = findViewById(R.id.btnFinish);
+        final ImageView cancel = findViewById(R.id.btnFinish);
         cancel.setClickable(false);
-        final Button start = findViewById(R.id.btn_detect);
+        final ImageView start = findViewById(R.id.btn_detect);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cancel.setClickable(true);
+
+                // Create journey Object with the time as the id
+                Date date = new Date();
+                String time = sdf.format(date);
+
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                DocumentReference ref = db.collection("users").document(user.getUid());
+
+                Journey journey = new Journey(time);
+
+                ref.collection("Journeys").document(time).set(journey)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void v) {
+                                Log.d(TAG, "DocumentSnapshot added with ID: ");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error adding document", e);
+                            }
+                        });
+
+
+
+
               //  start.setClickable(false);
                 if (allPermissionsGranted()) {
                     createCameraSource();
