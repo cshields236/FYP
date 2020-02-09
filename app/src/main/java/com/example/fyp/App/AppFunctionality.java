@@ -2,6 +2,7 @@ package com.example.fyp.App;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -82,19 +83,6 @@ public class AppFunctionality extends AppCompatActivity {
 
                 Journey journey = new Journey(time);
 
-                ref.collection("Journeys").document(time).set(journey)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void v) {
-                                Log.d(TAG, "DocumentSnapshot added with ID: ");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error adding document", e);
-                            }
-                        });
 
 
 

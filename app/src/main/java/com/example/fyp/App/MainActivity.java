@@ -39,6 +39,8 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
     private final FirebaseVisionFaceDetector detector;
     private FirebaseAuth mAuth;
     private Journey journey;
+
+    JourneyInformation information = new JourneyInformation();
     ArrayList<JourneyInformation> infos = new ArrayList<JourneyInformation>();
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -96,16 +98,18 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
 
 
             //Create new journey information object and add  data
-            JourneyInformation information = new JourneyInformation();
+
             information.setName(user.getEmail());
             information.setTime(time);
             information.setLeftEye(face.getLeftEyeOpenProbability());
             information.setRightEye(face.getRightEyeOpenProbability());
 
-            infos.add(information);
 
 
         }
+
+        infos.add(information);
+
 
         journey = new Journey();
         journey.setJourneyInformationss(infos);
@@ -115,13 +119,17 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Date date = new Date();
         String time = sdf.format(date);
-        DocumentReference ref = db.collection("users").document(user.getUid());
-        CollectionReference ref1 = ref.collection(time);
+//        DocumentReference ref = db.collection("users").document(user.getUid()).collection(time).document("Journeys");
 
-        ref1.add(journey)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
+        DocumentReference ref = db.collection("users").document(user.getUid()).collection("Journeys").document(time);
+
+        //CollectionReference ref1 = ref.collection(time);
+
+        ref.set(journey)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: ");
                     }
                 })
