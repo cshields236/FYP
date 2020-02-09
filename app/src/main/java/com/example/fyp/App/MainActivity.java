@@ -15,7 +15,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ml.vision.FirebaseVision;
@@ -40,7 +39,7 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
     private FirebaseAuth mAuth;
     private Journey journey;
 
-    JourneyInformation information = new JourneyInformation();
+    //    JourneyInformation information = new JourneyInformation();
     ArrayList<JourneyInformation> infos = new ArrayList<JourneyInformation>();
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -82,9 +81,12 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
             GraphicOverlay graphicOverlay) {
         graphicOverlay.clear();
 
-
         for (int i = 0; i < faces.size(); ++i) {
-            FirebaseVisionFace face = faces.get(i);
+
+
+            FirebaseVisionFace face;
+
+            face = faces.get(i);
             // Declaring and adding the graphic overlay to the screen
             FaceGraphic faceGraphic = new FaceGraphic(graphicOverlay);
             graphicOverlay.add(faceGraphic);
@@ -98,17 +100,13 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
 
 
             //Create new journey information object and add  data
+            infos.clear();
+            JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability());
 
-            information.setName(user.getEmail());
-            information.setTime(time);
-            information.setLeftEye(face.getLeftEyeOpenProbability());
-            information.setRightEye(face.getRightEyeOpenProbability());
-
+            infos.add(information);
 
 
         }
-
-        infos.add(information);
 
 
         journey = new Journey();
@@ -119,13 +117,12 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Date date = new Date();
         String time = sdf.format(date);
-//        DocumentReference ref = db.collection("users").document(user.getUid()).collection(time).document("Journeys");
 
 
         DocumentReference ref = db.collection("users").document(user.getUid()).collection("Journeys").document(time);
 
-        //CollectionReference ref1 = ref.collection(time);
 
+        // Writing a face analysis to the database once every second
         ref.set(journey)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -144,6 +141,7 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
         Log.d(TAG, "onComplete: " + "created");
 
     }
+
 
     @Override
     protected void onFailure(@NonNull Exception e) {
