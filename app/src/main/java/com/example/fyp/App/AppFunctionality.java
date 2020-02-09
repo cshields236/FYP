@@ -113,6 +113,7 @@ public class AppFunctionality extends AppCompatActivity {
 
         cameraSource = new CameraSource(this, graphicOverlay);
 
+
         cameraSource.setMachineLearningFrameProcessor(new MainActivity());
         cameraSource.setFacing(CameraSource.CAMERA_FACING_FRONT);
         startCameraSource();
@@ -136,6 +137,32 @@ public class AppFunctionality extends AppCompatActivity {
         }
     }
 
+    public void flipCamera(View view){
+        if(cameraSource.getCameraFacing() == CameraSource.CAMERA_FACING_FRONT) {
+
+            cameraSource.stop();
+            graphicOverlay.clear();
+
+            cameraSource = new CameraSource(this, graphicOverlay);
+
+
+            cameraSource.setMachineLearningFrameProcessor(new MainActivity());
+            cameraSource.setFacing(CameraSource.CAMERA_FACING_BACK);
+
+            startCameraSource();
+        }else{
+
+            cameraSource.stop();
+            graphicOverlay.clear();
+            cameraSource = new CameraSource(this, graphicOverlay);
+
+
+            cameraSource.setMachineLearningFrameProcessor(new MainActivity());
+            cameraSource.setFacing(CameraSource.CAMERA_FACING_FRONT);
+
+            startCameraSource();
+        }
+    }
 
     private String[] getRequiredPermissions() {
         try {
