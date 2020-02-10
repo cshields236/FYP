@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +30,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
+import org.w3c.dom.Document;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -47,7 +51,6 @@ public class AppFunctionality extends AppCompatActivity {
     private GraphicOverlay graphicOverlay;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,10 +89,7 @@ public class AppFunctionality extends AppCompatActivity {
                 Journey journey = new Journey(time);
 
 
-
-
-
-              //  start.setClickable(false);
+                //  start.setClickable(false);
                 if (allPermissionsGranted()) {
                     createCameraSource();
                 } else {
@@ -137,8 +137,8 @@ public class AppFunctionality extends AppCompatActivity {
         }
     }
 
-    public void flipCamera(View view){
-        if(cameraSource.getCameraFacing() == CameraSource.CAMERA_FACING_FRONT) {
+    public void flipCamera(View view) {
+        if (cameraSource.getCameraFacing() == CameraSource.CAMERA_FACING_FRONT) {
 
             cameraSource.stop();
             graphicOverlay.clear();
@@ -150,7 +150,7 @@ public class AppFunctionality extends AppCompatActivity {
             cameraSource.setFacing(CameraSource.CAMERA_FACING_BACK);
 
             startCameraSource();
-        }else{
+        } else {
 
             cameraSource.stop();
             graphicOverlay.clear();
@@ -223,6 +223,7 @@ public class AppFunctionality extends AppCompatActivity {
         Log.i(TAG, "Permission NOT granted: " + permission);
         return false;
     }
+
 
 
 }

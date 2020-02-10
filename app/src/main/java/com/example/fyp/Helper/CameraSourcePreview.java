@@ -75,6 +75,7 @@ public class CameraSourcePreview extends ViewGroup {
             }
             cameraSource.start(surfaceView.getHolder());
             if (overlay != null) {
+
                 Size size = cameraSource.getPreviewSize();
                 int min = Math.min(size.getWidth(), size.getHeight());
                 int max = Math.max(size.getWidth(), size.getHeight());
@@ -122,8 +123,8 @@ public class CameraSourcePreview extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int width = 2500;
-        int height = 1500;
+        int width = 5500;
+        int height = 3500;
         if (cameraSource != null) {
             Size size = cameraSource.getPreviewSize();
             if (size != null) {

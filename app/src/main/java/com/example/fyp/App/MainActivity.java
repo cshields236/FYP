@@ -143,6 +143,8 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
     }
 
 
+
+
     @Override
     protected void onFailure(@NonNull Exception e) {
         Log.e(TAG, "Face detection failed " + e);

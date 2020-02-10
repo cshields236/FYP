@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.fyp">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,9 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".App.AppFunctionality"></activity>
-        <activity android:name=".App.RegisterActivity"></activity>
-        <activity android:name=".App.MainActivity"></activity>
+        <activity android:name=".App.DashboardActivity"></activity>
+        <activity android:name=".App.statsActivity" />
+        <activity android:name=".App.AppFunctionality" />
+        <activity android:name=".App.RegisterActivity" />
+        <activity android:name=".App.MainActivity" />
+
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="face" />
@@ -24,5 +29,5 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 </manifest>

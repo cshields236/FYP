@@ -12,11 +12,11 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFace;
  * graphic overlay view.
  */
 public class FaceGraphic extends GraphicOverlay.Graphic {
-    private static final float FACE_POSITION_RADIUS = 10.0f;
+    private static final float FACE_POSITION_RADIUS = 8.0f;
     private static final float ID_TEXT_SIZE = 40.0f;
     private static final float ID_Y_OFFSET = 50.0f;
     private static final float ID_X_OFFSET = -50.0f;
-    private static final float BOX_STROKE_WIDTH = 5.0f;
+    private static final float BOX_STROKE_WIDTH = 2.0f;
 
     private static final int[] COLOR_CHOICES = {
             Color.RED
@@ -71,17 +71,17 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
         // Draws a circle at the position of the detected face, with the face's track id below.
         float x = translateX(face.getBoundingBox().centerX());
         float y = translateY(face.getBoundingBox().centerY());
-        canvas.drawCircle(x, y, FACE_POSITION_RADIUS, facePositionPaint);
-        canvas.drawText("id: " + face.getTrackingId(), x + ID_X_OFFSET, y + ID_Y_OFFSET, idPaint);
-        canvas.drawText(
-                "happiness: " + String.format("%.2f", face.getSmilingProbability()),
-                x + ID_X_OFFSET * 3,
-                y - ID_Y_OFFSET,
-                idPaint);
+      //  canvas.drawCircle(x, y, FACE_POSITION_RADIUS, facePositionPaint);
+//        canvas.drawText("id: " + face.getTrackingId(), x + ID_X_OFFSET, y + ID_Y_OFFSET, idPaint);
+//        canvas.drawText(
+//                "happiness: " + String.format("%.2f", face.getSmilingProbability()),
+//                x + ID_X_OFFSET ,
+//                y - ID_Y_OFFSET,
+//                idPaint);
         if (facing == CameraSource.CAMERA_FACING_FRONT) {
             canvas.drawText(
                     "right eye: " + String.format("%.2f", face.getRightEyeOpenProbability()),
-                    x - ID_X_OFFSET,
+                    x - ID_X_OFFSET ,
                     y,
                     idPaint);
             canvas.drawText(
@@ -103,12 +103,12 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
         }
 
         // Draws a bounding box around the face.
-        float xOffset = scaleX(face.getBoundingBox().width() / 2.0f);
-        float yOffset = scaleY(face.getBoundingBox().height() / 2.0f);
-        float left = x - xOffset /1.5f;
+        float xOffset = scaleX(face.getBoundingBox().width()/2);
+        float yOffset = scaleY(face.getBoundingBox().height()/2);
+        float left = x - xOffset ;
         float top = y - yOffset ;
-        float right = x + xOffset / 1.5f;
-        float bottom = y + yOffset /1.5f;
+        float right = x + xOffset ;
+        float bottom = y + yOffset;
         canvas.drawRect(left, top, right, bottom, boxPaint);
     }
 }
