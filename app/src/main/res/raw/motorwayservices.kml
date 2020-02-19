@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Motorway Services</name>
+	<description>A map of motorway service areas for use on sat navs, from Motorway Services Online. https://motorwayservicesonline.co.uk/</description>
+	<StyleMap id="m_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="s_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>https://motorwayservicesonline.co.uk/download/symbol.gif</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<ListStyle>
+		</ListStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>https://motorwayservicesonline.co.uk/download/symbol.gif</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<ListStyle>
+		</ListStyle>
+	</Style>	<StyleMap id="m_ylw-pushpin2">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin2</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin2_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="s_ylw-pushpin2">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>https://motorwayservicesonline.co.uk/download/symbol2.gif</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<ListStyle>
+		</ListStyle>
+	</Style>
+	<Style id="s_ylw-pushpin2_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>https://motorwayservicesonline.co.uk/download/symbol2.gif</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<ListStyle>
+		</ListStyle>
+	</Style><StyleMap id="m_ylw-pushpin3">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin3</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin3_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="s_ylw-pushpin3">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>https://motorwayservicesonline.co.uk/download/symbol3.gif</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<ListStyle>
+		</ListStyle>
+	</Style>
+	<Style id="s_ylw-pushpin3_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>https://motorwayservicesonline.co.uk/download/symbol3.gif</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<ListStyle>
+		</ListStyle>
+	</Style><StyleMap id="m_ylw-pushpin4">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin4</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin4_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="s_ylw-pushpin4">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>https://motorwayservicesonline.co.uk/download/symbol4.gif</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<ListStyle>
+		</ListStyle>
+	</Style>
+	<Style id="s_ylw-pushpin4_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>https://motorwayservicesonline.co.uk/download/symbol4.gif</href>
+			</Icon>
+			<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<ListStyle>
+		</ListStyle>
+	</Style>
+<Placemark>
+        <name>Cashel services</name>
+        <styleUrl>#m_ylw-pushpin</styleUrl>
+        <Point>
+            <coordinates>-7.873560,52.509578,0</coordinates>
+        </Point>
+    </Placemark>
+	<Placemark>
+        <name>Junction14 Mayfield services</name>
+        <styleUrl>#m_ylw-pushpin</styleUrl>
+        <Point>
+            <coordinates>-7.0133570,53.144433,0</coordinates>
+        </Point>
+    </Placemark>
+<Placemark>
+		<name>Castlebellingham services (northbound)</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.4153987,53.931095,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Castlebellingham services (southbound)</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.4128667,53.922478,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Enfield services (westbound)</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.8775594,53.412077,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Enfield services (eastbound)</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.8793619,53.412883,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Lusk services (northbound)</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.213294,53.537413,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Lusk services (southbound)</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.209561,53.539428,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Barack Obama Plaza</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-7.9454300,52.885060,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Cohannon services</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.6592464,54.501296,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Paulstown services</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-7.0357536,52.680180,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Lisburn services (north-eastbound)</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.0044146,54.524799,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Lisburn services (south-westbound)</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.0023224,54.526841,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Templepatrick services (north-westbound)</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.0160634,54.694075,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Galway Plaza</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-8.6060259,53.264191,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Kinnegad Plaza</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-7.1061911,53.452355,0</coordinates>
+		</Point>
+	</Placemark>
+		<Placemark>
+		<name>Fermoy services</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-8.2631361,52.164278,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Manor Stone services</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-7.4807909,52.867075,0</coordinates>
+		</Point>
+	</Placemark>	
+	<Placemark>
+		<name>Gorey services</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.2054267,52.750006,0</coordinates>
+		</Point>
+	</Placemark>	
+	<Placemark>
+		<name>Athlone services</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-7.82998,53.40104,0</coordinates>
+		</Point>
+	</Placemark>	
+	<Placemark>
+		<name>Kilcullen services</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.7547920,53.089807,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Wicklow services</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.0907200,53.043385,0</coordinates>
+		</Point>
+	</Placemark><Placemark>
+		<name>Carlow services</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-6.8821245,52.802100,0</coordinates>
+		</Point>
+	</Placemark>
+<Placemark>
+		<name>Birdhill services</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Point>
+			<coordinates>-8.4103346,52.758801,0</coordinates>
+		</Point>
+	</Placemark></Document>
+</kml>

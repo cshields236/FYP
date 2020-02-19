@@ -12,6 +12,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.data.kml.KmlLayer;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -40,20 +46,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+        try {
+            Intent intent = getIntent();
+            double lat = Double.parseDouble(intent.getStringExtra("Lat"));
+            double lng = Double.parseDouble(intent.getStringExtra("Long"));
 
-        Intent intent = getIntent();
-        double lat = Double.parseDouble(intent.getStringExtra("Lat"));
-        double lng = Double.parseDouble(intent.getStringExtra("Long"));
+            LatLng currentLocation = new LatLng(lat, lng);
+            mMap = googleMap;
 
-        LatLng currentLocation = new LatLng(lat, lng);
-        mMap = googleMap;
+            mMap.setMaxZoomPreference(20.0f);
+            mMap.setMinZoomPreference(10.0f);
+            // Add a marker in Sydney and move the camera
 
-        mMap.setMaxZoomPreference(20.0f);
-        mMap.setMinZoomPreference(10.0f);
-        // Add a marker in Sydney and move the camera
+            mMap.addMarker(new MarkerOptions().position(currentLocation).title("You are currently here"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+            mMap.setMaxZoomPreference(100);
 
-        mMap.addMarker(new MarkerOptions().position(currentLocation).title("You are currently here"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+
+            final KmlLayer layer = new KmlLayer(mMap, R.raw.motorwayservices, getApplicationContext());
+            layer.addLayerToMap();
+
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }
