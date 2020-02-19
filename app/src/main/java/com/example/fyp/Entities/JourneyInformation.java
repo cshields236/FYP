@@ -19,6 +19,12 @@ public class JourneyInformation {
         this.rightEye = rightEye;
     }
 
+    public JourneyInformation( double leftEye, double rightEye) {
+
+        this.leftEye = leftEye;
+        this.rightEye = rightEye;
+    }
+
     public String getName() {
         return name;
     }

@@ -1,5 +1,7 @@
 package com.example.fyp.App;
 
+import android.media.MediaPlayer;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import com.example.fyp.Helper.FaceGraphic;
 import com.example.fyp.Helper.FrameMetadata;
 import com.example.fyp.Helper.GraphicOverlay;
 import com.example.fyp.Helper.VisionProcessorBase;
+import com.example.fyp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -38,9 +41,12 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
     private final FirebaseVisionFaceDetector detector;
     private FirebaseAuth mAuth;
     private Journey journey;
+    public FirebaseVisionFace face;
+
+    private boolean eyesClosed = false;
 
     //    JourneyInformation information = new JourneyInformation();
-    ArrayList<JourneyInformation> infos = new ArrayList<JourneyInformation>();
+   private ArrayList<JourneyInformation> infos = new ArrayList<>();
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -84,8 +90,6 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
         for (int i = 0; i < faces.size(); ++i) {
 
 
-            FirebaseVisionFace face;
-
             face = faces.get(i);
             // Declaring and adding the graphic overlay to the screen
             FaceGraphic faceGraphic = new FaceGraphic(graphicOverlay);
@@ -95,58 +99,72 @@ public class MainActivity extends VisionProcessorBase<List<FirebaseVisionFace>> 
             //Get the current user that's logged in
 
 
+            //Create new journey information object and add  data
             Date date = new Date();
             String time = sdf.format(date);
-
-
-            //Create new journey information object and add  data
-            infos.clear();
+            Log.d(TAG, "onComplete: " + "created");
             JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability());
 
             infos.add(information);
-
-
+//            Log.d(TAG, "INFOMAMANIACS: "+ infos);
         }
+        addToDB();
 
-
-        journey = new Journey();
-        journey.setJourneyInformationss(infos);
-
-        Log.d(TAG, "onSuccess: " + journey.toString());
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Date date = new Date();
-        String time = sdf.format(date);
-
-
-        DocumentReference ref = db.collection("users").document(user.getUid()).collection("Journeys").document(time);
-
-
-        // Writing a face analysis to the database once every second
-        ref.set(journey)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: ");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
-
-
-        Log.d(TAG, "onComplete: " + "created");
+        infos.clear();
 
     }
 
 
+    public void addToDB() {
+
+            Date date = new Date();
+            String time = sdf.format(date);
+
+
+            journey = new Journey();
+            journey.setJourneyInformationss(infos);
+
+
+            Log.d(TAG, "onSuccess: " + journey.toString());
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
+            DocumentReference ref = db.collection("users").document(user.getUid()).collection("Journeys").document();
+
+
+            // Writing a face analysis to the database once every second
+            ref.set(journey)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void documentReference) {
+                            Log.d(TAG, "DocumentSnapshot added with ID: ");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error adding document", e);
+                        }
+                    });
+
+
+    }
 
 
     @Override
     protected void onFailure(@NonNull Exception e) {
         Log.e(TAG, "Face detection failed " + e);
     }
+
+
+    public boolean isEyesClosed() {
+        return eyesClosed;
+    }
+
+    public void setEyesClosed(boolean eyesClosed) {
+        this.eyesClosed = eyesClosed;
+    }
+
 }
+

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.fyp.Entities.Journey;
 import com.example.fyp.Helper.CameraSourcePreview;
+import com.example.fyp.Helper.FrameMetadata;
 import com.example.fyp.Helper.GraphicOverlay;
 import com.example.fyp.R;
 import com.example.fyp.Helper.CameraSource;
@@ -32,11 +34,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 
 
 import org.w3c.dom.Document;
 
 import java.io.IOException;
+import java.lang.ref.Reference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,7 +54,14 @@ public class AppFunctionality extends AppCompatActivity {
     private CameraSourcePreview preview;
     private GraphicOverlay graphicOverlay;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+
+
+//    final MediaPlayer bleepMP = MediaPlayer.create(AppFunctionality.this, R.raw.bleep);
+
+    public AppFunctionality() {
+    }
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,17 +89,9 @@ public class AppFunctionality extends AppCompatActivity {
             public void onClick(View v) {
                 cancel.setClickable(true);
 
-                // Create journey Object with the time as the id
-                Date date = new Date();
-                String time = sdf.format(date);
-
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-                DocumentReference ref = db.collection("users").document(user.getUid());
-
-                Journey journey = new Journey(time);
 
 
+                //bleepMP.start();
                 //  start.setClickable(false);
                 if (allPermissionsGranted()) {
                     createCameraSource();
@@ -104,6 +107,9 @@ public class AppFunctionality extends AppCompatActivity {
                 cameraSource.stop();
                 graphicOverlay.clear();
                 start.setClickable(true);
+//                MainActivity main = new MainActivity();
+//
+//                main.addToDB();
             }
         });
 
@@ -223,6 +229,7 @@ public class AppFunctionality extends AppCompatActivity {
         Log.i(TAG, "Permission NOT granted: " + permission);
         return false;
     }
+
 
 
 

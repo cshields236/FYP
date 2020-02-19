@@ -27,7 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class statsActivity extends AppCompatActivity {
     Button btn;
     TextView txt;
-    private static final String TAG = "StatsActivity";
+    private static final String TAG = "StatActivty";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +52,7 @@ public class statsActivity extends AppCompatActivity {
                      public void onComplete(@NonNull Task<QuerySnapshot> task) {
                          if (task.isSuccessful()) {
                              for (QueryDocumentSnapshot document : task.getResult()) {
-                                 Log.d(TAG, "onComplete: " + document.getId() + " => " + document.getData());
+                                 Log.d(TAG, "" + document.get("journeyInformationss"));
                              }
                          } else {
                              Log.d(TAG, "Error getting documents: ", task.getException());
@@ -61,18 +61,7 @@ public class statsActivity extends AppCompatActivity {
                      }
                  });
 
-                 // Writing a face analysis to the database once every second
-//                 ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                     @Override
-//                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                       txt.setText( documentSnapshot.get);
-//                     }
-//                 }).addOnFailureListener(new OnFailureListener() {
-//                     @Override
-//                     public void onFailure(@NonNull Exception e) {
-//
-//                     }
-//                 });
+
              }
          });
     }
