@@ -38,10 +38,10 @@ import java.util.Set;
  * coordinates for the graphics that are drawn:
  *
  * <ol>
- *   <li>{@link Graphic#scaleX(float)} and {@link Graphic#scaleY(float)} adjust the size of the
- *       supplied value from the preview scale to the view scale.
- *   <li>{@link Graphic#translateX(float)} and {@link Graphic#translateY(float)} adjust the
- *       coordinate from the preview's coordinate system to the view coordinate system.
+ * <li>{@link Graphic#scaleX(float)} and {@link Graphic#scaleY(float)} adjust the size of the
+ * supplied value from the preview scale to the view scale.
+ * <li>{@link Graphic#translateX(float)} and {@link Graphic#translateY(float)} adjust the
+ * coordinate from the preview's coordinate system to the view coordinate system.
  * </ol>
  */
 public class GraphicOverlay extends View {
@@ -73,10 +73,10 @@ public class GraphicOverlay extends View {
          * to view coordinates for the graphics that are drawn:
          *
          * <ol>
-         *   <li>{@link Graphic#scaleX(float)} and {@link Graphic#scaleY(float)} adjust the size of the
-         *       supplied value from the preview scale to the view scale.
-         *   <li>{@link Graphic#translateX(float)} and {@link Graphic#translateY(float)} adjust the
-         *       coordinate from the preview's coordinate system to the view coordinate system.
+         * <li>{@link Graphic#scaleX(float)} and {@link Graphic#scaleY(float)} adjust the size of the
+         * supplied value from the preview scale to the view scale.
+         * <li>{@link Graphic#translateX(float)} and {@link Graphic#translateY(float)} adjust the
+         * coordinate from the preview's coordinate system to the view coordinate system.
          * </ol>
          *
          * @param canvas drawing canvas
@@ -90,12 +90,16 @@ public class GraphicOverlay extends View {
             return horizontal * overlay.widthScaleFactor;
         }
 
-        /** Adjusts a vertical value of the supplied value from the preview scale to the view scale. */
+        /**
+         * Adjusts a vertical value of the supplied value from the preview scale to the view scale.
+         */
         public float scaleY(float vertical) {
             return vertical * overlay.heightScaleFactor;
         }
 
-        /** Returns the application context of the app. */
+        /**
+         * Returns the application context of the app.
+         */
         public Context getApplicationContext() {
             return overlay.getContext().getApplicationContext();
         }
@@ -127,7 +131,9 @@ public class GraphicOverlay extends View {
         super(context, attrs);
     }
 
-    /** Removes all graphics from the overlay. */
+    /**
+     * Removes all graphics from the overlay.
+     */
     public void clear() {
         synchronized (lock) {
             graphics.clear();
@@ -135,7 +141,9 @@ public class GraphicOverlay extends View {
         postInvalidate();
     }
 
-    /** Adds a graphic to the overlay. */
+    /**
+     * Adds a graphic to the overlay.
+     */
     public void add(Graphic graphic) {
         synchronized (lock) {
             graphics.add(graphic);
@@ -143,7 +151,9 @@ public class GraphicOverlay extends View {
         postInvalidate();
     }
 
-    /** Removes a graphic from the overlay. */
+    /**
+     * Removes a graphic from the overlay.
+     */
     public void remove(Graphic graphic) {
         synchronized (lock) {
             graphics.remove(graphic);
@@ -164,7 +174,9 @@ public class GraphicOverlay extends View {
         postInvalidate();
     }
 
-    /** Draws the overlay with its associated graphic objects. */
+    /**
+     * Draws the overlay with its associated graphic objects.
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -172,7 +184,7 @@ public class GraphicOverlay extends View {
         synchronized (lock) {
             if ((previewWidth != 0) && (previewHeight != 0)) {
                 widthScaleFactor = (float) canvas.getWidth() / (float) previewWidth / 2;
-                heightScaleFactor = (float) canvas.getHeight() / (float) previewHeight/ 2;
+                heightScaleFactor = (float) canvas.getHeight() / (float) previewHeight / 2;
             }
 
             for (Graphic graphic : graphics) {
@@ -180,37 +192,4 @@ public class GraphicOverlay extends View {
             }
         }
     }
-
-//  /**
-//   * Sets the aspect ratio for this view. The size of the view will be measured based on the ratio
-//   * calculated from the parameters. Note that the actual sizes of parameters don't matter, that
-//   * is, calling setAspectRatio(2, 3) and setAspectRatio(4, 6) make the same result.
-//   *
-//   * @param width  Relative horizontal size
-//   * @param height Relative vertical size
-//   */
-//  public void setAspectRatio(int width, int height) {
-//    if (width < 0 || height < 0) {
-//      throw new IllegalArgumentException("Size cannot be negative.");
-//    }
-//    mRatioWidth = width;
-//    mRatioHeight = height;
-//    requestLayout();
-//  }
-//
-//  @Override
-//  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//    int width = MeasureSpec.getSize(widthMeasureSpec);
-//    int height = MeasureSpec.getSize(heightMeasureSpec);
-//    if (0 == mRatioWidth || 0 == mRatioHeight) {
-//      setMeasuredDimension(width, height);
-//    } else {
-//      if (width < height * mRatioWidth / mRatioHeight) {
-//        setMeasuredDimension(width, width * mRatioHeight / mRatioWidth);
-//      } else {
-//        setMeasuredDimension(height * mRatioWidth / mRatioHeight, height);
-//      }
-//    }
-//  }
 }

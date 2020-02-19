@@ -17,7 +17,7 @@ import android.view.WindowManager;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
 
-import com.example.fyp.App.MainActivity;
+import com.example.fyp.App.CameraActivity;
 import com.google.android.gms.common.images.Size;
 
 import java.io.IOException;
@@ -98,8 +98,7 @@ public class CameraSource {
     private final FrameProcessingRunnable processingRunnable;
 
     private final Object processorLock = new Object();
-    // TODO(b/74400062) Re-enable the annotaion
-    // @GuardedBy("processorLock")
+
     private VisionImageProcessor frameProcessor;
 
     /**
@@ -565,7 +564,7 @@ public class CameraSource {
         }
     }
 
-    public void setMachineLearningFrameProcessor(MainActivity processor) {
+    public void setMachineLearningFrameProcessor(CameraActivity processor) {
         synchronized (processorLock) {
             cleanScreen();
             if (frameProcessor != null) {

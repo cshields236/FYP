@@ -33,10 +33,10 @@
         <activity
             android:name=".App.MapsActivity" />
         <activity android:name=".App.DashboardActivity" />
-        <activity android:name=".App.statsActivity" />
+        <activity android:name=".App.StatsActivity" />
         <activity android:name=".App.AppFunctionality" />
         <activity android:name=".App.RegisterActivity" />
-        <activity android:name=".App.MainActivity" />
+        <activity android:name=".App.CameraActivity" />
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"

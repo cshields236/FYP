@@ -24,7 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class statsActivity extends AppCompatActivity {
+public class StatsActivity extends AppCompatActivity {
     Button btn;
     TextView txt;
     private static final String TAG = "StatActivty";

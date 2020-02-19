@@ -1,8 +1,6 @@
 package com.example.fyp.App;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
@@ -10,41 +8,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.fyp.Entities.Journey;
 import com.example.fyp.Helper.CameraSourcePreview;
-import com.example.fyp.Helper.FrameMetadata;
 import com.example.fyp.Helper.GraphicOverlay;
 import com.example.fyp.R;
 import com.example.fyp.Helper.CameraSource;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 
 
-import org.w3c.dom.Document;
-
 import java.io.IOException;
-import java.lang.ref.Reference;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class AppFunctionality extends AppCompatActivity {
@@ -54,24 +34,26 @@ public class AppFunctionality extends AppCompatActivity {
     private CameraSourcePreview preview;
     private GraphicOverlay graphicOverlay;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    CameraActivity activity;
 
-
-
-
-//    final MediaPlayer bleepMP = MediaPlayer.create(AppFunctionality.this, R.raw.bleep);
+    MediaPlayer bleepMP;
+    //    final MediaPlayer bleepMP = MediaPlayer.create(AppFunctionality.this, R.raw.bleep);
+    private volatile FirebaseVisionFace firebaseVisionFace;
 
     public AppFunctionality() {
+
     }
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_camera);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-
+        bleepMP = MediaPlayer.create(AppFunctionality.this, R.raw.bleep);
         preview = findViewById(R.id.firePreview);
         graphicOverlay = findViewById(R.id.graphic_overlay);
+        final CameraActivity activity = new CameraActivity();
 
 
         if (preview == null) {
@@ -84,17 +66,25 @@ public class AppFunctionality extends AppCompatActivity {
         final ImageView cancel = findViewById(R.id.btnFinish);
         cancel.setClickable(false);
         final ImageView start = findViewById(R.id.btn_detect);
+
+
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cancel.setClickable(true);
 
 
-
-                //bleepMP.start();
-                //  start.setClickable(false);
+                start.setClickable(false);
                 if (allPermissionsGranted()) {
                     createCameraSource();
+                    Log.d(TAG, "EYES_CLOSED: " + activity.isEyesClosed());
+
+
+
+//                    if (activity.isEyesClosed() == true) {
+//                        final MediaPlayer bleepMP = MediaPlayer.create(AppFunctionality.this, R.raw.bleep);
+//                        bleepMP.start();
+//                    }
                 } else {
                     getRuntimePermissions();
                 }
@@ -106,12 +96,12 @@ public class AppFunctionality extends AppCompatActivity {
             public void onClick(View v) {
                 cameraSource.stop();
                 graphicOverlay.clear();
+
                 start.setClickable(true);
-//                MainActivity main = new MainActivity();
-//
-//                main.addToDB();
+
             }
         });
+
 
     }
 
@@ -119,8 +109,8 @@ public class AppFunctionality extends AppCompatActivity {
 
         cameraSource = new CameraSource(this, graphicOverlay);
 
-
-        cameraSource.setMachineLearningFrameProcessor(new MainActivity());
+        activity = new CameraActivity();
+        cameraSource.setMachineLearningFrameProcessor(activity);
         cameraSource.setFacing(CameraSource.CAMERA_FACING_FRONT);
         startCameraSource();
     }
@@ -152,7 +142,7 @@ public class AppFunctionality extends AppCompatActivity {
             cameraSource = new CameraSource(this, graphicOverlay);
 
 
-            cameraSource.setMachineLearningFrameProcessor(new MainActivity());
+            cameraSource.setMachineLearningFrameProcessor(new CameraActivity());
             cameraSource.setFacing(CameraSource.CAMERA_FACING_BACK);
 
             startCameraSource();
@@ -163,7 +153,7 @@ public class AppFunctionality extends AppCompatActivity {
             cameraSource = new CameraSource(this, graphicOverlay);
 
 
-            cameraSource.setMachineLearningFrameProcessor(new MainActivity());
+            cameraSource.setMachineLearningFrameProcessor(new CameraActivity());
             cameraSource.setFacing(CameraSource.CAMERA_FACING_FRONT);
 
             startCameraSource();
@@ -229,8 +219,6 @@ public class AppFunctionality extends AppCompatActivity {
         Log.i(TAG, "Permission NOT granted: " + permission);
         return false;
     }
-
-
 
 
 }
