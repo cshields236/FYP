@@ -40,6 +40,8 @@ public class AppFunctionality extends AppCompatActivity {
     //    final MediaPlayer bleepMP = MediaPlayer.create(AppFunctionality.this, R.raw.bleep);
     private volatile FirebaseVisionFace firebaseVisionFace;
 
+    boolean closed;
+
     public AppFunctionality() {
 
     }
@@ -80,7 +82,6 @@ public class AppFunctionality extends AppCompatActivity {
                     Log.d(TAG, "EYES_CLOSED: " + activity.isEyesClosed());
 
 
-
 //                    if (activity.isEyesClosed() == true) {
 //                        final MediaPlayer bleepMP = MediaPlayer.create(AppFunctionality.this, R.raw.bleep);
 //                        bleepMP.start();
@@ -113,7 +114,30 @@ public class AppFunctionality extends AppCompatActivity {
         cameraSource.setMachineLearningFrameProcessor(activity);
         cameraSource.setFacing(CameraSource.CAMERA_FACING_FRONT);
         startCameraSource();
+
+        checkEyes();
+
     }
+
+    public void checkEyes() {
+
+
+        closed = activity.isEyesClosed();
+        if (closed = true) {
+            bleepMP.start();
+
+            Log.d(TAG, "TWAT: ");
+        } else {
+            Log.d(TAG, "PAT: ");
+
+
+            {
+                Log.d(TAG, "Even Worse: ");
+                bleepMP.start();
+            }
+        }
+    }
+
 
     private void startCameraSource() {
         if (cameraSource != null) {

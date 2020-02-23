@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ml.vision.FirebaseVision;
@@ -105,20 +106,23 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
             Date date = new Date();
             String time = sdf.format(date);
             Log.d(TAG, "onComplete: " + "created");
+
+
+//
+            if (infos.size() > 5) {
+
+                infos.clear();
+            }
+
             JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability());
 
-            if (face.getRightEyeOpenProbability() < 0.4 && face.getLeftEyeOpenProbability() < 0.4) {
-                eyesClosed = true;
-            }
             infos.add(information);
 
         }
-        addToDB();
 
-        infos.clear();
 
 //        Log.d(TAG, "EyesClosed: " + isEyesClosed());
-
+        addToDB();
     }
 
 
@@ -130,32 +134,37 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
 
         journey = new Journey();
         journey.setJourneyInformationss(infos);
-
-
-        Log.d(TAG, "onSuccess: " + journey.toString());
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
-        DocumentReference ref = db.collection("users").document(user.getUid()).collection("Journeys").document();
+        if (infos.size() > 1) {
+            if (time.equals(infos.get(infos.size() - 1).getTime())) {
+
+                DocumentReference ref = db.collection("users").document(user.getUid()).collection("Journeys").document(time);
 
 
-        // Writing a face analysis to the database once every second
-        ref.set(journey)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: ");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+                // Writing a face analysis to the database once every second
+                ref.set(journey)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
 
 
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error adding document", e);
+                            }
+                        });
+
+            } else {
+                infos.clear();
+            }
+        } else {
+
+        }
     }
 
 
