@@ -108,7 +108,7 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
             Log.d(TAG, "onComplete: " + "created");
 
 
-//
+
             if (infos.size() > 5) {
 
                 infos.clear();
@@ -121,7 +121,6 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
         }
 
 
-//        Log.d(TAG, "EyesClosed: " + isEyesClosed());
         addToDB();
     }
 
@@ -137,7 +136,7 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
-        if (infos.size() > 1) {
+
             if (time.equals(infos.get(infos.size() - 1).getTime())) {
 
                 DocumentReference ref = db.collection("users").document(user.getUid()).collection("Journeys").document(time);
@@ -162,9 +161,7 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
             } else {
                 infos.clear();
             }
-        } else {
 
-        }
     }
 
 

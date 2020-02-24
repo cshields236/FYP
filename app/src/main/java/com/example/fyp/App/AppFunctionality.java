@@ -20,12 +20,15 @@ import com.example.fyp.R;
 import com.example.fyp.Helper.CameraSource;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class AppFunctionality extends AppCompatActivity {
     private static final int PERMISSION_REQUESTS = 0;
@@ -58,6 +61,9 @@ public class AppFunctionality extends AppCompatActivity {
         final CameraActivity activity = new CameraActivity();
 
 
+
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         if (preview == null) {
             Log.d(TAG, "Preview is null");
         }
@@ -79,13 +85,8 @@ public class AppFunctionality extends AppCompatActivity {
                 start.setClickable(false);
                 if (allPermissionsGranted()) {
                     createCameraSource();
-                    Log.d(TAG, "EYES_CLOSED: " + activity.isEyesClosed());
 
-
-//                    if (activity.isEyesClosed() == true) {
-//                        final MediaPlayer bleepMP = MediaPlayer.create(AppFunctionality.this, R.raw.bleep);
-//                        bleepMP.start();
-//                    }
+             
                 } else {
                     getRuntimePermissions();
                 }
@@ -115,27 +116,6 @@ public class AppFunctionality extends AppCompatActivity {
         cameraSource.setFacing(CameraSource.CAMERA_FACING_FRONT);
         startCameraSource();
 
-        checkEyes();
-
-    }
-
-    public void checkEyes() {
-
-
-        closed = activity.isEyesClosed();
-        if (closed = true) {
-            bleepMP.start();
-
-            Log.d(TAG, "TWAT: ");
-        } else {
-            Log.d(TAG, "PAT: ");
-
-
-            {
-                Log.d(TAG, "Even Worse: ");
-                bleepMP.start();
-            }
-        }
     }
 
 

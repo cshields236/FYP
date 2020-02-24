@@ -8,27 +8,52 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fyp.Entities.User;
 import com.example.fyp.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class DashboardActivity extends AppCompatActivity {
+    private static final String TAG = "Dashboard" ;
     double lat;
     double lng;
     ImageView mapsBtn;
-
+    TextView lbl;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        DocumentReference ref = db.collection("users").document(user.getUid());
 
+        lbl = findViewById(R.id.dashboardLbl);
+
+         ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+              User user  =  documentSnapshot.toObject(User.class);
+                Log.d(TAG, "Name: " + user.getFname());
+
+                lbl.setText(user.getFname().toUpperCase() + "'S  DASHBOARD");
+            }
+        });
 
 
         LocationRequest mLocationRequest = new LocationRequest();
