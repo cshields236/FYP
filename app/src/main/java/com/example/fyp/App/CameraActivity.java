@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 
@@ -47,8 +48,12 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
     AppFunctionality appFunctionality;
     private boolean eyesClosed = false;
 
+
+
     //    JourneyInformation information = new JourneyInformation();
     private ArrayList<JourneyInformation> infos = new ArrayList<>();
+
+    private ArrayList<JourneyInformation> infosDB = new ArrayList<>();
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -99,6 +104,7 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
             graphicOverlay.add(faceGraphic);
             //updating the graphic overlay every time a face is detected in order to track the face in real time
             faceGraphic.updateFace(face, frameMetadata.getCameraFacing());
+            appFunctionality.updateFace(face);
             //Get the current user that's logged in
 
 
@@ -108,13 +114,14 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
             Log.d(TAG, "onComplete: " + "created");
 
 
+            if (infosDB.size() > 5) {
 
-            if (infos.size() > 5) {
-
-                infos.clear();
+                infosDB.clear();
             }
 
             JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability());
+
+            infosDB.add(information);
 
             infos.add(information);
 
@@ -132,35 +139,29 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
 
 
         journey = new Journey();
-        journey.setJourneyInformationss(infos);
+        journey.setJourneyInformationss(infosDB);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
-
-            if (time.equals(infos.get(infos.size() - 1).getTime())) {
-
-                DocumentReference ref = db.collection("users").document(user.getUid()).collection("Journeys").document(time);
+        DocumentReference ref = db.collection("users").document(user.getUid()).collection("Journeys").document(time);
 
 
-                // Writing a face analysis to the database once every second
-                ref.set(journey)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
+        // Writing a face analysis to the database once every second
+        ref.set(journey)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
 
 
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error adding document", e);
-                            }
-                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
 
-            } else {
-                infos.clear();
-            }
 
     }
 
@@ -177,6 +178,10 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
 
     public void setEyesClosed(boolean eyesClosed) {
         this.eyesClosed = eyesClosed;
+    }
+
+    public ArrayList<JourneyInformation> getInfos() {
+        return infos;
     }
 
 }

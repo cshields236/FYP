@@ -9,11 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.fyp.Entities.Journey;
+import com.example.fyp.Entities.JourneyInformation;
 import com.example.fyp.Helper.CameraSourcePreview;
 import com.example.fyp.Helper.GraphicOverlay;
 import com.example.fyp.R;
@@ -26,7 +29,10 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,12 +44,13 @@ public class AppFunctionality extends AppCompatActivity {
     private GraphicOverlay graphicOverlay;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     CameraActivity activity;
+    private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    MediaPlayer bleepMP;
-    //    final MediaPlayer bleepMP = MediaPlayer.create(AppFunctionality.this, R.raw.bleep);
+    TextView textView ;
+
     private volatile FirebaseVisionFace firebaseVisionFace;
+    private ArrayList<JourneyInformation> infor = new ArrayList<>();
 
-    boolean closed;
 
     public AppFunctionality() {
 
@@ -55,11 +62,9 @@ public class AppFunctionality extends AppCompatActivity {
         setContentView(R.layout.activity_camera);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        bleepMP = MediaPlayer.create(AppFunctionality.this, R.raw.bleep);
         preview = findViewById(R.id.firePreview);
         graphicOverlay = findViewById(R.id.graphic_overlay);
         final CameraActivity activity = new CameraActivity();
-
 
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -86,7 +91,7 @@ public class AppFunctionality extends AppCompatActivity {
                 if (allPermissionsGranted()) {
                     createCameraSource();
 
-             
+
                 } else {
                     getRuntimePermissions();
                 }
@@ -101,9 +106,16 @@ public class AppFunctionality extends AppCompatActivity {
 
                 start.setClickable(true);
 
+
             }
         });
 
+
+    }
+
+
+    public void getList(View view){
+        Log.d(TAG, "getList: " + getInfor());
 
     }
 
@@ -222,6 +234,60 @@ public class AppFunctionality extends AppCompatActivity {
         }
         Log.i(TAG, "Permission NOT granted: " + permission);
         return false;
+    }
+
+
+    public void updateFace(FirebaseVisionFace face) {
+        firebaseVisionFace = face;
+
+        if (face != null) {
+            doSomething();
+        }
+    }
+
+
+    public void doSomething() {
+        FirebaseVisionFace face = firebaseVisionFace;
+
+        if (face != null) {
+//            Log.d(TAG, "doSomething: " + face.getLeftEyeOpenProbability());
+
+            Date date = new Date();
+            String time = sdf.format(date);
+
+
+            JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability());
+
+            infor.add(information);
+
+
+         
+
+        } else {
+            return;
+        }
+
+
+
+
+
+
+
+//        if (infor.size() > 3) {
+//            for (int i = 0; i < infor.size(); i++) {
+//                if (infor.get(i).getLeftEye() < 0.4 && infor.get(i - 1).getLeftEye() < 0.4) {
+//                        bleepMP.start();
+//                        break;
+//                                    }
+//            }
+//        } else {
+//            return;
+//        }
+    }
+
+
+    public ArrayList<JourneyInformation> getInfor() {
+        return infor;
     }
 
 

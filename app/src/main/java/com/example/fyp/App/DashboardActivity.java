@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,9 @@ public class DashboardActivity extends AppCompatActivity {
                 Log.d(TAG, "Name: " + user.getFname());
 
                 lbl.setText(user.getFname().toUpperCase() + "'S  DASHBOARD");
+
+                ProgressBar progressBar = findViewById(R.id.progressBar2);
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
 
