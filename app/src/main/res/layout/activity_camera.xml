@@ -15,6 +15,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="89dp"
         android:layout_marginBottom="30dp"
+        android:onClick="StartJourney"
         android:src="@drawable/start"
         android:text="Start Journey"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -27,8 +28,9 @@
         android:layout_below="@+id/firePreview"
         android:layout_marginStart="89dp"
         android:layout_marginBottom="30dp"
-        android:scaleType="fitXY"
+        android:onClick="EndJourney"
 
+        android:scaleType="fitXY"
         android:src="@drawable/finish"
         android:text="Finish"
         app:layout_constraintBottom_toBottomOf="parent"

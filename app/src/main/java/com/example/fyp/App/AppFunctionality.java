@@ -1,9 +1,12 @@
 package com.example.fyp.App;
 
+import java.util.UUID;
+
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -21,8 +25,11 @@ import com.example.fyp.Helper.CameraSourcePreview;
 import com.example.fyp.Helper.GraphicOverlay;
 import com.example.fyp.R;
 import com.example.fyp.Helper.CameraSource;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
@@ -34,7 +41,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 public class AppFunctionality extends AppCompatActivity {
     private static final int PERMISSION_REQUESTS = 0;
@@ -45,29 +51,49 @@ public class AppFunctionality extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     CameraActivity activity;
     private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    TextView textView ;
-
+    ArrayList<JourneyInformation> infor = new ArrayList<>();
+    DocumentReference ref;
     private volatile FirebaseVisionFace firebaseVisionFace;
-    private ArrayList<JourneyInformation> infor = new ArrayList<>();
+    private ArrayList<Journey> journeys = new ArrayList<>();
+
+    static AppFunctionality activityA;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
+    private ImageView cancel;
+
+    ImageView start;
+
+    boolean clicked = false;
+    final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    MediaPlayer mp;
 
 
     public AppFunctionality() {
 
+
     }
 
-
     protected void onCreate(Bundle savedInstanceState) {
+        activityA = this;
+
+        mp = MediaPlayer.create(this, R.raw.bleep);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         preview = findViewById(R.id.firePreview);
         graphicOverlay = findViewById(R.id.graphic_overlay);
-        final CameraActivity activity = new CameraActivity();
 
-
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         if (preview == null) {
             Log.d(TAG, "Preview is null");
@@ -76,48 +102,110 @@ public class AppFunctionality extends AppCompatActivity {
         if (graphicOverlay == null) {
             Log.d(TAG, "graphicOverlay is null");
         }
-        final ImageView cancel = findViewById(R.id.btnFinish);
+        cancel = findViewById(R.id.btnFinish);
+
         cancel.setClickable(false);
-        final ImageView start = findViewById(R.id.btn_detect);
+        start = findViewById(R.id.btn_detect);
+        clicked = false;
+
+    }
 
 
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancel.setClickable(true);
+    public void StartJourney(View view) {
+        journeys = new ArrayList<>();
+        clicked = false;
+        if (allPermissionsGranted()) {
+            ref = db.collection("users").document(user.getUid()).collection("Journeys").document(String.valueOf(UUID.randomUUID()));
+            createCameraSource();
+            cancel.setClickable(true);
 
 
-                start.setClickable(false);
-                if (allPermissionsGranted()) {
-                    createCameraSource();
+            start.setClickable(false);
 
 
-                } else {
-                    getRuntimePermissions();
+        }
+
+    }
+
+
+    public void EndJourney(View view) {
+        cameraSource.stop();
+        graphicOverlay.clear();
+
+        clicked = true;
+        start.setClickable(true);
+        cancel.setClickable(false);
+
+    }
+
+
+    public void updateFace(FirebaseVisionFace face) {
+
+        firebaseVisionFace = face;
+
+        Date date = new Date();
+        String time = sdf.format(date);
+
+
+        JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability());
+        if (information != null) {
+            AddToList(information);
+
+        }
+
+
+    }
+
+
+    public void AddToList(JourneyInformation journeyInformation) {
+
+        infor.add(journeyInformation);
+        Journey j = new Journey(infor);
+
+        journeys.add(j);
+        Journey journey = new Journey(infor);
+
+
+        Log.d(TAG, "AddToList: " + journey);
+
+
+        if (infor.size() > 3) {
+            if (infor.get(infor.size() - 1).getLeftEye() < .2 && infor.get(infor.size() - 2).getLeftEye() < .2) {
+                mp.start();
+
+            }
+        }
+
+        //If Journey is finished the journeys data will be added to the DB
+        if (clicked == true) {
+            DocumentReference ref = db.collection("users").document(user.getUid()).collection("Journeys").document();
+
+
+            ref.set(journey).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
                 }
-            }
-        });
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
 
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cameraSource.stop();
-                graphicOverlay.clear();
-
-                start.setClickable(true);
-
-
-            }
-        });
-
-
+                }
+            });
+        }
+//
+////        if (infor.size() > 3) {
+//            for (int i = 0; i < infor.size(); i++) {
+//                if (infor.get(i).getLeftEye() < 0.4 && infor.get(i - 1).getLeftEye() < 0.4) {
+//                        bleepMP.start();
+//                        break;
+//                                    }
+//            }
+//        } else {
+//            return;
+//        }
     }
 
-
-    public void getList(View view){
-        Log.d(TAG, "getList: " + getInfor());
-
-    }
 
     public void createCameraSource() {
 
@@ -237,58 +325,7 @@ public class AppFunctionality extends AppCompatActivity {
     }
 
 
-    public void updateFace(FirebaseVisionFace face) {
-        firebaseVisionFace = face;
-
-        if (face != null) {
-            doSomething();
-        }
+    public static AppFunctionality getInstance() {
+        return activityA;
     }
-
-
-    public void doSomething() {
-        FirebaseVisionFace face = firebaseVisionFace;
-
-        if (face != null) {
-//            Log.d(TAG, "doSomething: " + face.getLeftEyeOpenProbability());
-
-            Date date = new Date();
-            String time = sdf.format(date);
-
-
-            JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability());
-
-            infor.add(information);
-
-
-         
-
-        } else {
-            return;
-        }
-
-
-
-
-
-
-
-//        if (infor.size() > 3) {
-//            for (int i = 0; i < infor.size(); i++) {
-//                if (infor.get(i).getLeftEye() < 0.4 && infor.get(i - 1).getLeftEye() < 0.4) {
-//                        bleepMP.start();
-//                        break;
-//                                    }
-//            }
-//        } else {
-//            return;
-//        }
-    }
-
-
-    public ArrayList<JourneyInformation> getInfor() {
-        return infor;
-    }
-
-
 }

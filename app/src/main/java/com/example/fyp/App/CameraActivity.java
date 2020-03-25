@@ -40,20 +40,10 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
 
     private static final String TAG = "FaceDetectionProcessor";
 
-    private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private final FirebaseVisionFaceDetector detector;
-    private FirebaseAuth mAuth;
-    private Journey journey;
+
     public FirebaseVisionFace face;
-    AppFunctionality appFunctionality;
-    private boolean eyesClosed = false;
 
-
-
-    //    JourneyInformation information = new JourneyInformation();
-    private ArrayList<JourneyInformation> infos = new ArrayList<>();
-
-    private ArrayList<JourneyInformation> infosDB = new ArrayList<>();
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -93,7 +83,6 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
             FrameMetadata frameMetadata,
             GraphicOverlay graphicOverlay) {
         graphicOverlay.clear();
-        appFunctionality = new AppFunctionality();
 
         for (int i = 0; i < faces.size(); ++i) {
 
@@ -104,84 +93,20 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
             graphicOverlay.add(faceGraphic);
             //updating the graphic overlay every time a face is detected in order to track the face in real time
             faceGraphic.updateFace(face, frameMetadata.getCameraFacing());
-            appFunctionality.updateFace(face);
-            //Get the current user that's logged in
-
-
-            //Create new journey information object and add  data
-            Date date = new Date();
-            String time = sdf.format(date);
-            Log.d(TAG, "onComplete: " + "created");
-
-
-            if (infosDB.size() > 5) {
-
-                infosDB.clear();
-            }
-
-            JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability());
-
-            infosDB.add(information);
-
-            infos.add(information);
+            AppFunctionality.getInstance().updateFace(face);
 
         }
 
 
-        addToDB();
-    }
-
-
-    public void addToDB() {
-
-        Date date = new Date();
-        String time = sdf.format(date);
-
-
-        journey = new Journey();
-        journey.setJourneyInformationss(infosDB);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
-        DocumentReference ref = db.collection("users").document(user.getUid()).collection("Journeys").document(time);
-
-
-        // Writing a face analysis to the database once every second
-        ref.set(journey)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
-
 
     }
+
+
 
 
     @Override
     protected void onFailure(@NonNull Exception e) {
         Log.e(TAG, "Face detection failed " + e);
-    }
-
-
-    public boolean isEyesClosed() {
-        return eyesClosed;
-    }
-
-    public void setEyesClosed(boolean eyesClosed) {
-        this.eyesClosed = eyesClosed;
-    }
-
-    public ArrayList<JourneyInformation> getInfos() {
-        return infos;
     }
 
 }

@@ -6,6 +6,8 @@ import java.util.List;
 public class Journey {
     private List<JourneyInformation> journeyInformationss = new ArrayList<JourneyInformation>();
     private String time;
+    private String id;
+
 
     public Journey() {
 
@@ -16,9 +18,9 @@ public class Journey {
         this.journeyInformationss = journeyInformationss;
     }
 
-    public Journey(String time) {
+    public Journey(String id) {
 
-        this.time = time;
+        this.id = id;
     }
 
     public List<JourneyInformation> getJourneyInformationss() {
@@ -42,5 +44,13 @@ public class Journey {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
