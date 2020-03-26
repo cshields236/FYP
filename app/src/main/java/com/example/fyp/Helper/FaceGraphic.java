@@ -72,7 +72,7 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
         float x = translateX(face.getBoundingBox().centerX());
         float y = translateY(face.getBoundingBox().centerY());
       //  canvas.drawCircle(x, y, FACE_POSITION_RADIUS, facePositionPaint);
-//        canvas.drawText("id: " + face.getTrackingId(), x + ID_X_OFFSET, y + ID_Y_OFFSET, idPaint);
+        canvas.drawText("id: " + face.getTrackingId(), x + ID_X_OFFSET, y + ID_Y_OFFSET, idPaint);
 //        canvas.drawText(
 //                "happiness: " + String.format("%.2f", face.getSmilingProbability()),
 //                x + ID_X_OFFSET ,

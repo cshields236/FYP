@@ -3,6 +3,7 @@ package com.example.fyp.App;
 import java.util.UUID;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
@@ -58,15 +59,7 @@ public class AppFunctionality extends AppCompatActivity {
 
     static AppFunctionality activityA;
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    private String id;
     private ImageView cancel;
 
     ImageView start;
@@ -75,6 +68,8 @@ public class AppFunctionality extends AppCompatActivity {
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
     MediaPlayer mp;
 
+
+    private int blinks;
 
     public AppFunctionality() {
 
@@ -108,10 +103,14 @@ public class AppFunctionality extends AppCompatActivity {
         start = findViewById(R.id.btn_detect);
         clicked = false;
 
+
+        blinks = 0;
     }
 
 
     public void StartJourney(View view) {
+
+        blinks = 0;
         journeys = new ArrayList<>();
         clicked = false;
         if (allPermissionsGranted()) {
@@ -136,6 +135,18 @@ public class AppFunctionality extends AppCompatActivity {
         start.setClickable(true);
         cancel.setClickable(false);
 
+
+        Log.d(TAG, "EndJourney: " + blinks);
+
+        for (int q = 0; q < infor.size(); q++) {
+            if (infor.get(q).getLeftEye() < .2 && infor.get(q).getRightEye() <.2 ){
+                Log.d(TAG, "EndJourney: " + infor.get(q));
+            }
+
+        }
+
+        Intent intent = new Intent(this, JourneyRecap.class);
+        startActivity(intent);
     }
 
 
@@ -148,10 +159,16 @@ public class AppFunctionality extends AppCompatActivity {
 
 
         JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability());
+
+        if (face.getLeftEyeOpenProbability() < .2 && face.getRightEyeOpenProbability() < .2) {
+            blinks++;
+
+        }
         if (information != null) {
             AddToList(information);
 
         }
+//        Log.d(TAG, "updateFace: " + information);
 
 
     }
@@ -166,9 +183,6 @@ public class AppFunctionality extends AppCompatActivity {
         Journey journey = new Journey(infor);
 
 
-        Log.d(TAG, "AddToList: " + journey);
-
-
         if (infor.size() > 3) {
             if (infor.get(infor.size() - 1).getLeftEye() < .2 && infor.get(infor.size() - 2).getLeftEye() < .2) {
                 mp.start();
@@ -176,23 +190,24 @@ public class AppFunctionality extends AppCompatActivity {
             }
         }
 
+
         //If Journey is finished the journeys data will be added to the DB
-        if (clicked == true) {
-            DocumentReference ref = db.collection("users").document(user.getUid()).collection("Journeys").document();
-
-
-            ref.set(journey).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-
-                }
-            });
-        }
+//        if (clicked == true) {
+//            DocumentReference ref = db.collection("users").document(user.getUid()).collection("Journeys").document();
+//
+//
+//            ref.set(journey).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                @Override
+//                public void onSuccess(Void aVoid) {
+//
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//
+//                }
+//            });
+//        }
 //
 ////        if (infor.size() > 3) {
 //            for (int i = 0; i < infor.size(); i++) {

@@ -1,5 +1,6 @@
 package com.example.fyp.App;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
@@ -18,16 +19,22 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
+public class JourneyRecap extends FragmentActivity implements OnMapReadyCallback {
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        setContentView(R.layout.activity_journey_recap);
+
+
+        Intent intent = getIntent();
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapV);
         mapFragment.getMapAsync(this);
@@ -46,32 +53,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        try {
-            Intent intent = getIntent();
-            double lat = Double.parseDouble(intent.getStringExtra("Lat"));
-            double lng = Double.parseDouble(intent.getStringExtra("Long"));
+//        Intent intent = getIntent();
+//        double lat = Double.parseDouble(intent.getStringExtra("Lat"));
+//        double lng = Double.parseDouble(intent.getStringExtra("Long"));
 
-            LatLng currentLocation = new LatLng(lat, lng);
-            mMap = googleMap;
+//        LatLng currentLocation = new LatLng(lat, lng);
+        mMap = googleMap;
 
-            mMap.setMaxZoomPreference(20.0f);
-            mMap.setMinZoomPreference(10.0f);
-            // Add a marker in Sydney and move the camera
+        mMap.setMaxZoomPreference(20.0f);
+        mMap.setMinZoomPreference(10.0f);
 
-            mMap.addMarker(new MarkerOptions().position(currentLocation).title("You are currently here"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-            mMap.setMaxZoomPreference(100);
-
-
-            final KmlLayer layer = new KmlLayer(mMap, R.raw.motorwayservices, getApplicationContext());
-            layer.addLayerToMap();
-
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+//        mMap.addMarker(new MarkerOptions().position(currentLocation).title("You are currently here"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+//        mMap.setMaxZoomPreference(100);
+//
 
     }
 }
