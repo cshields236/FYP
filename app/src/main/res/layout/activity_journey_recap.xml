@@ -40,12 +40,23 @@
 
 
     <TextView
-        android:id="@+id/timeTxt"
+        android:id="@+id/starttimeTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/lengthTxt"
         android:layout_toRightOf="@id/lbl2"
         android:paddingLeft="7dp"
+        android:paddingTop="20dp"
+        android:text="1hr2"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/endtimeTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lengthTxt"
+        android:layout_toRightOf="@id/starttimeTxt"
+        android:paddingLeft="20dp"
         android:paddingTop="20dp"
         android:text="1hr2"
         android:textSize="24sp" />
@@ -66,7 +77,9 @@
         android:id="@+id/blinkTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/timeTxt"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="105dp"
         android:layout_toRightOf="@id/lbl3"
         android:paddingLeft="7dp"
         android:paddingTop="20dp"

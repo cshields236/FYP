@@ -1,6 +1,11 @@
 package com.example.fyp.Entities;
 
-public class JourneyInformation {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class JourneyInformation implements Parcelable {
     private String name;
     private String time;
     private double leftEye;
@@ -24,6 +29,25 @@ public class JourneyInformation {
         this.leftEye = leftEye;
         this.rightEye = rightEye;
     }
+
+    protected JourneyInformation(Parcel in) {
+        name = in.readString();
+        time = in.readString();
+        leftEye = in.readDouble();
+        rightEye = in.readDouble();
+    }
+
+    public static final Creator<JourneyInformation> CREATOR = new Creator<JourneyInformation>() {
+        @Override
+        public JourneyInformation createFromParcel(Parcel in) {
+            return new JourneyInformation(in);
+        }
+
+        @Override
+        public JourneyInformation[] newArray(int size) {
+            return new JourneyInformation[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -66,5 +90,18 @@ public class JourneyInformation {
                 ", leftEye=" + leftEye +
                 ", rightEye=" + rightEye +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(time);
+        dest.writeDouble(leftEye);
+        dest.writeDouble(rightEye);
     }
 }

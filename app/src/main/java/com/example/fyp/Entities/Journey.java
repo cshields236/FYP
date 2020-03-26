@@ -1,9 +1,13 @@
 package com.example.fyp.Entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Journey {
+public class Journey implements Parcelable {
     private List<JourneyInformation> journeyInformationss = new ArrayList<JourneyInformation>();
     private String time;
     private String id;
@@ -22,6 +26,24 @@ public class Journey {
 
         this.id = id;
     }
+
+    protected Journey(Parcel in) {
+        journeyInformationss = in.createTypedArrayList(JourneyInformation.CREATOR);
+        time = in.readString();
+        id = in.readString();
+    }
+
+    public static final Creator<Journey> CREATOR = new Creator<Journey>() {
+        @Override
+        public Journey createFromParcel(Parcel in) {
+            return new Journey(in);
+        }
+
+        @Override
+        public Journey[] newArray(int size) {
+            return new Journey[size];
+        }
+    };
 
     public List<JourneyInformation> getJourneyInformationss() {
         return journeyInformationss;
@@ -52,5 +74,17 @@ public class Journey {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(journeyInformationss);
+        dest.writeString(time);
+        dest.writeString(id);
     }
 }
