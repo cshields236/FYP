@@ -2,6 +2,7 @@ package com.example.fyp.App;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.util.Timer;
 import java.util.UUID;
 
 import android.Manifest;
@@ -258,12 +259,8 @@ public class AppFunctionality extends AppCompatActivity {
 
             JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability());
 
-            if(face != null){
-                if (face.getLeftEyeOpenProbability() < .1 && face.getRightEyeOpenProbability() < .1) {
-                    blinks++;
 
-                }
-            }
+
             if (information != null) {
                 AddToList(information);
 
@@ -282,13 +279,22 @@ public class AppFunctionality extends AppCompatActivity {
             Journey journey = new Journey(infor);
 
 
-            if (infor.size() > 3) {
-                if (infor.get(infor.size() - 1).getLeftEye() < .2 && infor.get(infor.size() - 1).getLeftEye() < .1) {
+            if (infor.size() > 5) {
+                if (infor.get(infor.size() - 1).getLeftEye() < .2 && infor.get(infor.size() - 2).getLeftEye() < .2 && infor.get(infor.size() - 3).getLeftEye() < .2  && infor.get(infor.size() - 4).getLeftEye() < .2  && infor.get(infor.size() - 5).getLeftEye() < .2)  {
                     mp.start();
+
+                }
+                if (infor.get(infor.size() - 1).getLeftEye() < .2  && infor.get(infor.size() - 3).getLeftEye() > .2){
+                    blinks++;
 
                 }
             }
 
+//            if(blinks > 10){
+//
+//                startActivity(new Intent(AppFunctionality.this, TimerActivity.class));
+//
+//            }
 
             //If Journey is finished the journeys data will be added to the DB
 //        if (clicked == true) {

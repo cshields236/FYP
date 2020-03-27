@@ -8,12 +8,20 @@
     android:background="@drawable/bg">
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="10dp"
+        android:text="JOURNEY RECAP"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+    <TextView
         android:id="@+id/lbl1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="20dp"
-        android:paddingTop="20dp"
-        android:text="Journey Length "
+        android:paddingTop="60dp"
+        android:text="Journey Length: "
         android:textSize="24sp" />
 
     <TextView
@@ -22,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/lbl1"
         android:paddingLeft="7dp"
-        android:paddingTop="20dp"
+        android:paddingTop="60dp"
         android:text="0:00"
         android:textSize="24sp" />
 
@@ -35,7 +43,7 @@
         android:layout_below="@id/lbl1"
         android:paddingLeft="20dp"
         android:paddingTop="20dp"
-        android:text="Time"
+        android:text="Start:"
         android:textSize="24sp" />
 
 
@@ -55,10 +63,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/lengthTxt"
-        android:layout_toRightOf="@id/starttimeTxt"
-        android:paddingLeft="20dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="0dp"
+        android:layout_toRightOf="@id/end"
+        android:paddingLeft="7dp"
         android:paddingTop="20dp"
         android:text="1hr2"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="3dp"
+        android:layout_toRightOf="@id/starttimeTxt"
+        android:paddingLeft="20dp"
+        android:layout_below="@id/lengthTxt"
+        android:paddingTop="110dp"
+        android:text="End:"
         android:textSize="24sp" />
 
     <TextView
@@ -69,7 +93,7 @@
         android:layout_below="@id/lbl2"
         android:paddingLeft="20dp"
         android:paddingTop="20dp"
-        android:text="Blinks"
+        android:text="Blinks:"
         android:textSize="24sp" />
 
 
@@ -82,7 +106,7 @@
         android:layout_marginTop="105dp"
         android:layout_toRightOf="@id/lbl3"
         android:paddingLeft="7dp"
-        android:paddingTop="20dp"
+        android:paddingTop="60dp"
         android:text="53"
         android:textSize="24sp" />
 
@@ -90,10 +114,10 @@
         android:id="@+id/mapV"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="662dp"
         android:layout_below="@id/lbl3"
-        android:paddingTop="20dp"
+        android:layout_marginTop="45dp"
 
-        />
+        android:paddingTop="70dp" />
 
 </RelativeLayout>

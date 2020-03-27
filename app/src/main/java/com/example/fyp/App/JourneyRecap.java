@@ -68,7 +68,7 @@ public class JourneyRecap extends FragmentActivity implements OnMapReadyCallback
         length.setText(String.valueOf(jl / 1000));
 
         String b = intent.getStringExtra("blinks");
-        double blinks = Double.parseDouble(b) / 6;
+        double blinks = Double.parseDouble(b) / 60;
         blinktxt.setText(String.valueOf(blinks ));
     }
 
