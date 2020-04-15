@@ -119,4 +119,9 @@ public class DashboardActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    public void ViewPastJourneys(View view){
+        Intent i = new Intent(this, ViewJourneys.class);
+        startActivity(i);
+    }
+
 }

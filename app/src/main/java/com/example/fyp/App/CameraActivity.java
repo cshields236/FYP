@@ -93,15 +93,18 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
             graphicOverlay.add(faceGraphic);
             //updating the graphic overlay every time a face is detected in order to track the face in real time
             faceGraphic.updateFace(face, frameMetadata.getCameraFacing());
-            AppFunctionality.getInstance().updateFace(face);
 
-        }
+
+
+
+                    AppFunctionality.getInstance().updateFace(face);
+
+                }
+
 
 
 
     }
-
-
 
 
     @Override

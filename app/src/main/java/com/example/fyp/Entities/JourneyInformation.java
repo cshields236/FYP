@@ -10,6 +10,17 @@ public class JourneyInformation implements Parcelable {
     private String time;
     private double leftEye;
     private double rightEye;
+    private int blink;
+    private boolean isBlinking;
+
+    public JourneyInformation(String name, String time, double leftEye, double rightEye, int blink, boolean isBlinking) {
+        this.name = name;
+        this.time = time;
+        this.leftEye = leftEye;
+        this.rightEye = rightEye;
+        this.blink = blink;
+        this.isBlinking = isBlinking;
+    }
 
 
 
@@ -17,14 +28,15 @@ public class JourneyInformation implements Parcelable {
     }
 
 
-    public JourneyInformation(String name, String time, double leftEye, double rightEye) {
+    public JourneyInformation(String name, String time, double leftEye, double rightEye, int blink) {
         this.name = name;
         this.time = time;
         this.leftEye = leftEye;
         this.rightEye = rightEye;
+        this.blink = blink;
     }
 
-    public JourneyInformation( double leftEye, double rightEye) {
+    public JourneyInformation(double leftEye, double rightEye) {
 
         this.leftEye = leftEye;
         this.rightEye = rightEye;
@@ -80,6 +92,20 @@ public class JourneyInformation implements Parcelable {
 
     public void setRightEye(double rightEye) {
         this.rightEye = rightEye;
+    }
+
+    public int getBlink() {
+        return blink;
+    }
+    public boolean isBlinking() {
+        return isBlinking;
+    }
+
+    public void setBlinking(boolean blinking) {
+        isBlinking = blinking;
+    }
+    public void setBlink(int blink) {
+        this.blink = blink;
     }
 
     @Override

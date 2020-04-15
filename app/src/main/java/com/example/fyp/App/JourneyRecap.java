@@ -31,7 +31,11 @@ import com.google.maps.android.data.kml.KmlLayer;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class JourneyRecap extends FragmentActivity implements OnMapReadyCallback {
 
@@ -39,8 +43,7 @@ public class JourneyRecap extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
 
     TextView length, startTime, endTime, blinktxt;
-
-    ArrayList<JourneyInformation> infor;
+    double mins;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +64,28 @@ public class JourneyRecap extends FragmentActivity implements OnMapReadyCallback
 
         long jl = intent.getLongExtra("length", 0);
 
+        ///Converting journey length from milliseconds to Time object
+        String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(jl),
+                TimeUnit.MILLISECONDS.toMinutes(jl) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(jl)),
+                TimeUnit.MILLISECONDS.toSeconds(jl) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(jl)));
+
 
         startTime.setText(intent.getStringExtra("startTime"));
         endTime.setText(intent.getStringExtra("endTime"));
 
-        length.setText(String.valueOf(jl / 1000));
+
+        if (jl < 60000) {
+            mins = 1;
+        } else {
+            mins = (jl / 1000) / 60 * 60;
+        }
+        length.setText(hms);
 
         String b = intent.getStringExtra("blinks");
-        double blinks = Double.parseDouble(b) / 60;
-        blinktxt.setText(String.valueOf(blinks ));
+        double blinks = Double.parseDouble(b) ;
+        double blinksPerMin = blinks / mins;
+
+        blinktxt.setText(String.valueOf(blinksPerMin));
     }
 
 
@@ -101,7 +117,6 @@ public class JourneyRecap extends FragmentActivity implements OnMapReadyCallback
 
             }
         }, 2000);   //5 seconds
-
 
     }
 }

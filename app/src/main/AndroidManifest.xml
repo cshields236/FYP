@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".App.TimerActivity"></activity>
+        <activity android:name=".App.ViewJourneys"></activity>
+        <activity android:name=".App.TimerActivity" />
         <activity android:name=".App.JourneyRecap" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
