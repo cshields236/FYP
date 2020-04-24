@@ -21,6 +21,10 @@ public class Journey implements Parcelable {
     public Journey(List<JourneyInformation> journeyInformationss) {
         this.journeyInformationss = journeyInformationss;
     }
+    public Journey(List<JourneyInformation> journeyInformationss, String time) {
+        this.journeyInformationss = journeyInformationss;
+        this.time = time;
+    }
 
     public Journey(String id) {
 

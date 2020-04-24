@@ -2,6 +2,7 @@ package com.example.fyp.App;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.UUID;
@@ -77,6 +78,9 @@ public class AppFunctionality extends AppCompatActivity {
     double lat, lat1;
     double lng, lng1;
 
+
+    int mincounter = 0;
+    int counter = 0;
     private ImageView cancel;
 
     ImageView start;
@@ -85,7 +89,11 @@ public class AppFunctionality extends AppCompatActivity {
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
     MediaPlayer mp;
     DocumentReference ref;
+    CollectionReference ref1;
     private int blinks;
+    int Tblinks;
+
+   private HashMap<Integer, Integer> timeBlinks = new HashMap<Integer, Integer>();
 
     public AppFunctionality() {
 
@@ -154,12 +162,13 @@ public class AppFunctionality extends AppCompatActivity {
             Date date = new Date();
 
 
-
             String time = sdf.format(date);
             ref = db.collection("users").document(user.getUid()).collection("Journeys").document(time);
 
 
-
+            ref1 = db.collection("users").document(user.getUid()).collection("Journeys").document(ref.getId()).collection("Journey");
+            Journey j = new Journey(time);
+            ref.set(j);
             createCameraSource();
             cancel.setClickable(true);
 
@@ -186,14 +195,6 @@ public class AppFunctionality extends AppCompatActivity {
         cancel.setClickable(false);
 
 
-        for (int q = 0; q < infor.size(); q++) {
-            if (infor.get(q).getLeftEye() < .2 && infor.get(q).getRightEye() < .2) {
-                Log.d(TAG, "EndJourney: " + infor.get(q));
-            }
-
-        }
-
-
         FusedLocationProviderClient mFusedLocationClient = new FusedLocationProviderClient(AppFunctionality.this);
         if (ContextCompat.checkSelfPermission(AppFunctionality.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, new LocationCallback() {
@@ -217,11 +218,11 @@ public class AppFunctionality extends AppCompatActivity {
             Toast.makeText(AppFunctionality.this, "Coordinate", Toast.LENGTH_LONG).show();
         }
 
+        clicked = true;
 
         //Get Journey Length
-
         String[] t1, t2;
-        t1 = infor.get(0).getTime().split(" ");
+        t1 = ref.getId().split(" ");
         t2 = infor.get(infor.size() - 1).getTime().split(" ");
 
         String startingTime = t1[1];
@@ -254,64 +255,110 @@ public class AppFunctionality extends AppCompatActivity {
         intent.putExtra("endLng", String.valueOf(lng1));
         intent.putExtra("startTime", infor.get(0).getTime().split(" ")[1]);
         intent.putExtra("endTime", infor.get(infor.size() - 1).getTime().split(" ")[1]);
-        intent.putExtra("blinks", String.valueOf(blinks));
+        intent.putExtra("blinks", String.valueOf(Tblinks));
 
         startActivity(intent);
 
-        Log.d(TAG, "Blink: " + blinks);
 
         finish();
     }
 
-
+    //TODO Add compare last minute recoreded with average of the previous mins
     public void updateFace(FirebaseVisionFace face) {
 
+        counter++;
         firebaseVisionFace = face;
+        Journey journey;
 
+
+        String[] t1, t2;
+        if (!infor.isEmpty()) {
+            t1 = ref.getId().split(" ");
+            t2 = infor.get(infor.size() - 1).getTime().split(" ");
+
+            String startingTime = t1[1];
+            String endTIme = t2[1];
+
+
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+            Date date1 = null;
+            try {
+                date1 = format.parse(startingTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Date date2 = null;
+            try {
+                date2 = format.parse(endTIme);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            difference = date2.getTime() - date1.getTime();
+        }
 
         if (face != null) {
-            Date date = new Date();
-            String time = sdf.format(date);
-
-            //Get Journey Length
-            if (infor.size() > 3) {
-                String[] t1, t2;
-                t1 = infor.get(0).getTime().split(" ");
-                t2 = infor.get(infor.size() - 1).getTime().split(" ");
-
-                String startingTime = t1[1];
-                String endTIme = t2[1];
+            if (counter < 50) {
+                Date date = new Date();
+                String time = sdf.format(date);
 
 
-                SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-                Date date1 = null;
-                try {
-                    date1 = format.parse(startingTime);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                if (face.getLeftEyeOpenProbability() < .2 && face.getLeftEyeOpenProbability() < .2 && face.getLeftEyeOpenProbability() > 0 && face.getLeftEyeOpenProbability() > 0) {
+                    blinks++;
+                    Tblinks++;
                 }
-                Date date2 = null;
-                try {
-                    date2 = format.parse(endTIme);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability(), Tblinks);
+                infor.add(information);
+
+                journey = new Journey(infor);
+
+                Log.d(TAG, "updateFace: " + difference);
+                if (difference > 0) {
+
+                    Log.d(TAG, "updateFace: " + blinks);
+
+                    if ((((double) difference / (double) 10000 % 1) == 0.0) && blinks > 0) {
+
+                        mincounter++;
+                        timeBlinks.put(mincounter, blinks);
+                        Log.d(TAG, "Blinky Hashmap: " + timeBlinks);
+                        blinks = 0;
+
+                        if (!timeBlinks.isEmpty()) {
+                            int currentBlink  = timeBlinks.get(timeBlinks.size());
+                            if (timeBlinks.containsKey(2)) {
+                                if (timeBlinks.get(1) < currentBlink) {
+                                    Toast.makeText( this, "More Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2) , Toast.LENGTH_SHORT).show();
+                                    mp.start();
+                                } else {
+                               Toast.makeText(this,  "Less Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
+                                }
+
+                            }else{return;}
+                        }
+                    }
+
+
                 }
-                difference = date2.getTime() - date1.getTime();
+            } else if (counter == 50 || clicked == true) {
+                Date date = new Date();
+                String time = sdf.format(date);
+
+                journey = new Journey(infor, time);
+                ref1.add(journey).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        infor.clear();
+                        counter = 0;
+                        Toast.makeText(AppFunctionality.this, "Added To DB", Toast.LENGTH_SHORT);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "FAIIIL: ");
+                    }
+                });
 
             }
-
-            if (face.getLeftEyeOpenProbability() < .2 && face.getLeftEyeOpenProbability() < .2 && face.getLeftEyeOpenProbability() > 0 && face.getLeftEyeOpenProbability() > 0) {
-                blinks++;
-            }
-            JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability(), blinks);
-            infor.add(information);
-
-            Journey journey = new Journey(infor);
-            if (infor.size() == 50) {
-                ref.set(journey);
-                infor.clear();
-            }
-
 
 
             if (infor.size() > 5) {
@@ -321,14 +368,13 @@ public class AppFunctionality extends AppCompatActivity {
 
             }
 
-            Log.d(TAG, "Size: " + infor.size());
+//            Log.d(TAG, "Size: " + infor.size());
         }
 
 
     }
 
-
-    public void AddToList(JourneyInformation journeyInformation) {
+    private void monitorBlinks(HashMap<Integer, Integer> timeBlinks) {
 
 
     }

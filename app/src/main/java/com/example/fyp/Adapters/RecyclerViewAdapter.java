@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.fyp.App.PastJourney;
 import com.example.fyp.R;
 
 import java.util.ArrayList;
@@ -54,8 +56,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Toast.makeText(mContext,mImageNames.get(position) , Toast.LENGTH_SHORT).show();
+                 Toast.makeText(mContext,mImageNames.get(position) , Toast.LENGTH_SHORT).show();
 
+                 Intent i = new Intent(mContext, PastJourney.class);
+                 i.putExtra("journ", mImageNames.get(position));
+                  mContext.startActivity(i);
             }
         });
     }

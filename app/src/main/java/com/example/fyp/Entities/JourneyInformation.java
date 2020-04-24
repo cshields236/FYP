@@ -36,8 +36,10 @@ public class JourneyInformation implements Parcelable {
         this.blink = blink;
     }
 
-    public JourneyInformation(double leftEye, double rightEye) {
+    public JourneyInformation(String name, String time, double leftEye, double rightEye) {
 
+        this.name = name;
+        this.time = time;
         this.leftEye = leftEye;
         this.rightEye = rightEye;
     }
