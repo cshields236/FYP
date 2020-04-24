@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.fyp.Entities.Journey;
 import com.example.fyp.Entities.JourneyInformation;
 import com.example.fyp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 
 public class PastJourney extends AppCompatActivity {
     private static final String TAG = "Past";
-
+    ArrayList<Journey> js = new ArrayList<>();
     TextView t;
     ArrayList<String> ss = new ArrayList<>();
     private ArrayList<JourneyInformation> journeys = new ArrayList<>();
@@ -52,7 +53,11 @@ public class PastJourney extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
-                    Log.d(TAG, "" + task.getResult().getDocuments().get(0));
+                  for (QueryDocumentSnapshot document: task.getResult()){
+                      Journey information = document.toObject(Journey.class);
+                      js.add(information);
+                  }
+                    Log.d(TAG, "onComplete: "  + js.get(2).getJourneyInformationss());
                 }
 
             }

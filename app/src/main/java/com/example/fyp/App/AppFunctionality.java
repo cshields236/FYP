@@ -70,6 +70,7 @@ public class AppFunctionality extends AppCompatActivity {
     private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     ArrayList<JourneyInformation> infor = new ArrayList<>();
 
+    private int prevBlink;
     private volatile FirebaseVisionFace firebaseVisionFace;
     private ArrayList<Journey> journeys = new ArrayList<>();
     long difference = 0;
@@ -93,7 +94,7 @@ public class AppFunctionality extends AppCompatActivity {
     private int blinks;
     int Tblinks;
 
-   private HashMap<Integer, Integer> timeBlinks = new HashMap<Integer, Integer>();
+    private HashMap<Integer, Integer> timeBlinks = new HashMap<Integer, Integer>();
 
     public AppFunctionality() {
 
@@ -103,6 +104,7 @@ public class AppFunctionality extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         activityA = this;
 
+        prevBlink = 0;
         mp = MediaPlayer.create(this, R.raw.bleep);
 
 
@@ -324,17 +326,31 @@ public class AppFunctionality extends AppCompatActivity {
                         blinks = 0;
 
                         if (!timeBlinks.isEmpty()) {
-                            int currentBlink  = timeBlinks.get(timeBlinks.size());
-                            if (timeBlinks.containsKey(2)) {
+                            int currentBlink = timeBlinks.get(timeBlinks.size());
+                            if (timeBlinks.size() == 2) {
                                 if (timeBlinks.get(1) < currentBlink) {
-                                    Toast.makeText( this, "More Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2) , Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(this, "More Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
                                     mp.start();
                                 } else {
-                               Toast.makeText(this,  "Less Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(this, "Less Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
                                 }
+                            }
+                            if (timeBlinks.size() > 2) {
+                                for (int i :timeBlinks.keySet()) {
+                                    prevBlink =+ timeBlinks.get(i);
+                                }
+                                int avg = prevBlink / timeBlinks.size();
 
-                            }else{return;}
+                                if (currentBlink > avg) {
+                                    Toast.makeText(this, "More Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
+                                    mp.start();
+                                } else {
+                                    Toast.makeText(this, "Less Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
                         }
+
                     }
 
 

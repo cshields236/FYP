@@ -49,7 +49,7 @@ public class ViewJourneys extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    Log.d(TAG, "onComplete: "  + task.getResult().getDocuments());
+//                    Log.d(TAG, "onComplete: "  + task.getResult().getDocuments());
                     for (QueryDocumentSnapshot doc : task.getResult()) {
 
                         journeys.add(doc.getId());
