@@ -9,110 +9,124 @@
    >
 
 
-    <EditText
-        android:id="@+id/rEmail"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_text_input_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="99dp"
-        android:layout_marginTop="130dp"
-        android:layout_marginEnd="99dp"
-        android:ems="10"
-        android:hint="Email"
-        android:inputType="textPersonName"
-
-        android:textAlignment="center"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/pw_text_input_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
-    <EditText
-        android:id="@+id/rPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="99dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="99dp"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rEmail" />
+        <EditText
+            android:id="@+id/rEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="99dp"
+            android:layout_marginTop="130dp"
+            android:layout_marginEnd="99dp"
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textPersonName"
 
-    <EditText
-        android:id="@+id/fName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="99dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="99dp"
-        android:ems="10"
-        android:hint="First Name"
-        android:inputType="text"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rPassword" />
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/lName"
-        android:layout_width="wrap_content"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/fname_text_input_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="99dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="99dp"
-        android:ems="10"
-        android:hint="Last Name"
-        android:inputType="text"
-        android:textAlignment="center"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/lname_text_input_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fName" />
+        app:layout_constraintTop_toBottomOf="@+id/pw_text_input_layout">
+
+
+        <EditText
+            android:id="@+id/fName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="99dp"
+            android:layout_marginEnd="99dp"
+            android:ems="10"
+            android:hint="First Name"
+            android:inputType="text"
+            android:textAlignment="center" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lname_text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fname_text_input_layout">
+
+
+        <EditText
+            android:id="@+id/lName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="99dp"
+            android:layout_marginEnd="99dp"
+            android:ems="10"
+            android:hint="Last Name"
+            android:inputType="text"
+            android:textAlignment="center" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
     <TextView
         android:id="@+id/rLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="178dp"
+        android:layout_marginTop="39dp"
         android:layout_marginEnd="174dp"
-        android:layout_marginBottom="110dp"
+        android:layout_marginBottom="72dp"
         android:text="Already Registered? Sign In Here"
+        android:textColor="#ffff"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textDirection="firstStrong"
+        android:textSize="18sp"
+        android:textStyle="normal|bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/guestLink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="110dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="57dp"
-        android:text="Or Just Continue as a Guest."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rLink" />
+        app:layout_constraintTop_toBottomOf="@+id/button3" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="150dp"
+        android:background="@drawable/roundbutton"
         android:backgroundTint="@color/spots_dialog_color"
         android:clickable="true"
         android:onClick="register"
         android:text="register "
         app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="#ffff"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lName"></Button>
+        app:layout_constraintTop_toBottomOf="@+id/lname_text_input_layout"></Button>
 
     <ImageView
         android:id="@+id/imageView2"
@@ -123,5 +137,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/header" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/pw_text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/fname_text_input_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_text_input_layout">
+
+
+        <EditText
+            android:id="@+id/rPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="99dp"
+            android:layout_marginEnd="99dp"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textAlignment="center" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

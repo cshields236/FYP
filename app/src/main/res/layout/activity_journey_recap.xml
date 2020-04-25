@@ -8,13 +8,17 @@
     android:background="@drawable/bg">
 
     <TextView
+        style="@android:style/Widget.Holo.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:paddingTop="10dp"
         android:text="JOURNEY RECAP"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="30dp"
         android:textStyle="bold" />
+
     <TextView
         android:id="@+id/lbl1"
         android:layout_width="wrap_content"
@@ -22,7 +26,8 @@
         android:paddingLeft="20dp"
         android:paddingTop="60dp"
         android:text="Journey Length: "
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/lengthTxt"
@@ -44,7 +49,8 @@
         android:paddingLeft="20dp"
         android:paddingTop="20dp"
         android:text="Start:"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
 
     <TextView
@@ -75,15 +81,16 @@
         android:id="@+id/end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/lengthTxt"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="6dp"
         android:layout_marginTop="3dp"
         android:layout_toRightOf="@id/starttimeTxt"
         android:paddingLeft="20dp"
-        android:layout_below="@id/lengthTxt"
         android:paddingTop="110dp"
         android:text="End:"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <TextView
 
@@ -93,8 +100,9 @@
         android:layout_below="@id/lbl2"
         android:paddingLeft="20dp"
         android:paddingTop="20dp"
-        android:text="Blinks:"
-        android:textSize="24sp" />
+        android:text="Number of Warnings:"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
 
     <TextView

@@ -1,6 +1,7 @@
 package com.example.fyp.App;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.fyp.Entities.User;
 import com.example.fyp.R;
@@ -32,7 +34,6 @@ public class DashboardActivity extends AppCompatActivity {
     private static final String TAG = "Dashboard";
     double lat;
     double lng;
-    ImageView mapsBtn;
     TextView lbl;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -43,11 +44,11 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+
         Intent i = getIntent();
-//        DocumentReference ref = db.collection("users").document(user.getUid());
 
         lbl = findViewById(R.id.dashboardLbl);
-        lbl.setText(i.getStringExtra("name").toUpperCase() + "'s Dashboard");
+        lbl.setText("Hello, " + i.getStringExtra("name") );
 
 
         LocationRequest mLocationRequest = new LocationRequest();
@@ -79,7 +80,7 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
 
-        mapsBtn = findViewById(R.id.imageView4);
+       CardView mapsBtn = findViewById(R.id.imageView4);
 
         mapsBtn.setOnClickListener(new View.OnClickListener() {
             @Override

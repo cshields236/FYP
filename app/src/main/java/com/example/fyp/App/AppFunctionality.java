@@ -66,7 +66,7 @@ public class AppFunctionality extends AppCompatActivity {
     private ArrayList<Journey> journeys = new ArrayList<>();
     long difference = 0;
     static AppFunctionality activityA;
-
+    private int warnings;
     double lat, lat1;
     double lng, lng1;
 
@@ -255,9 +255,10 @@ public class AppFunctionality extends AppCompatActivity {
         intent.putExtra("length", difference);
         intent.putExtra("endLat", String.valueOf(lat1));
         intent.putExtra("endLng", String.valueOf(lng1));
-        intent.putExtra("startTime", infor.get(0).getTime().split(" ")[1]);
+        intent.putExtra("startTime", ref.getId().split(" ")[1]);
         intent.putExtra("endTime", infor.get(infor.size() - 1).getTime().split(" ")[1]);
         intent.putExtra("blinks", String.valueOf(Tblinks));
+        intent.putExtra("warnings", String.valueOf(warnings));
 
         startActivity(intent);
 
@@ -265,7 +266,6 @@ public class AppFunctionality extends AppCompatActivity {
         finish();
     }
 
-    //TODO Add compare last minute recoreded with average of the previous mins
     public void updateFace(FirebaseVisionFace face) {
 
         counter++;
@@ -305,13 +305,21 @@ public class AppFunctionality extends AppCompatActivity {
 
 
                 if (face.getLeftEyeOpenProbability() < .2 && face.getLeftEyeOpenProbability() < .2 && face.getLeftEyeOpenProbability() > 0 && face.getLeftEyeOpenProbability() > 0) {
-                    blinks++;
-                    Tblinks++;
+
                 }
                 JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability(), Tblinks);
                 infor.add(information);
 
                 journey = new Journey(infor);
+
+                if (infor.size() > 4) {
+
+                    if (infor.get(infor.size() - 1).getLeftEye() < .2 && infor.get(infor.size() - 2).getLeftEye() > .2) {
+                        blinks++;
+                        Tblinks++;
+                    }
+                }
+
 
                 Log.d(TAG, "updateFace: " + difference);
                 if (difference > 0) {
@@ -345,6 +353,7 @@ public class AppFunctionality extends AppCompatActivity {
                                     Toast.makeText(this, "More Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
                                     String toSpeak = "Blinks Increased";
                                     toSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
+                                    warnings++;
                                 } else {
                                     Toast.makeText(this, "Less Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
 
@@ -356,6 +365,7 @@ public class AppFunctionality extends AppCompatActivity {
 
 
                 }
+                // Posting information to the database in batches of 50
             } else if (counter == 50 || clicked == true) {
                 Date date = new Date();
                 String time = sdf.format(date);

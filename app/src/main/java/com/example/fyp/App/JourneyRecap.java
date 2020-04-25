@@ -85,7 +85,7 @@ public class JourneyRecap extends FragmentActivity implements OnMapReadyCallback
         double blinks = Double.parseDouble(b) ;
         double blinksPerMin = blinks / mins;
 
-        blinktxt.setText(String.valueOf(blinksPerMin));
+        blinktxt.setText(String.valueOf(intent.getStringExtra("warnings")));
     }
 
 

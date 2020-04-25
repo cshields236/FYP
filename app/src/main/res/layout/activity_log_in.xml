@@ -95,7 +95,7 @@
         android:layout_marginStart="161dp"
         android:layout_marginEnd="162dp"
         android:layout_marginBottom="194dp"
-        android:background="@drawable/roundbutton"
+        android:background="@color/colorPrimary"
         android:onClick="signIn"
         android:text="Sign in "
         android:textColor="#ffff"
