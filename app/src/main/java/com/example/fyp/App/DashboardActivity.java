@@ -29,7 +29,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class DashboardActivity extends AppCompatActivity {
-    private static final String TAG = "Dashboard" ;
+    private static final String TAG = "Dashboard";
     double lat;
     double lng;
     ImageView mapsBtn;
@@ -37,27 +37,17 @@ public class DashboardActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        DocumentReference ref = db.collection("users").document(user.getUid());
+        Intent i = getIntent();
+//        DocumentReference ref = db.collection("users").document(user.getUid());
 
         lbl = findViewById(R.id.dashboardLbl);
-
-         ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-              User user  =  documentSnapshot.toObject(User.class);
-                Log.d(TAG, "Name: " + user.getFname());
-
-                lbl.setText(user.getFname().toUpperCase() + "'S  DASHBOARD");
-
-                ProgressBar progressBar = findViewById(R.id.progressBar2);
-                progressBar.setVisibility(View.INVISIBLE);
-            }
-        });
+        lbl.setText(i.getStringExtra("name").toUpperCase() + "'s Dashboard");
 
 
         LocationRequest mLocationRequest = new LocationRequest();
@@ -76,7 +66,6 @@ public class DashboardActivity extends AppCompatActivity {
                     lng = l.getLastLocation().getLongitude();
 
 
-
                 }
             }, getMainLooper());
 
@@ -88,7 +77,6 @@ public class DashboardActivity extends AppCompatActivity {
                     );
             Toast.makeText(DashboardActivity.this, "Coordinate", Toast.LENGTH_LONG).show();
         }
-
 
 
         mapsBtn = findViewById(R.id.imageView4);
@@ -119,7 +107,7 @@ public class DashboardActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void ViewPastJourneys(View view){
+    public void ViewPastJourneys(View view) {
         Intent i = new Intent(this, ViewJourneys.class);
         startActivity(i);
     }

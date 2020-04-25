@@ -1,11 +1,8 @@
 package com.example.fyp.App;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.UUID;
 
 import android.Manifest;
 import android.content.Context;
@@ -13,15 +10,12 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Parcelable;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,9 +29,6 @@ import com.example.fyp.Helper.CameraSourcePreview;
 import com.example.fyp.Helper.GraphicOverlay;
 import com.example.fyp.R;
 import com.example.fyp.Helper.CameraSource;
-import com.github.angads25.toggle.interfaces.OnToggledListener;
-import com.github.angads25.toggle.model.ToggleableView;
-import com.github.angads25.toggle.widget.LabeledSwitch;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -69,7 +60,7 @@ public class AppFunctionality extends AppCompatActivity {
     CameraActivity activity;
     private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     ArrayList<JourneyInformation> infor = new ArrayList<>();
-
+    TextToSpeech toSpeech;
     private int prevBlink;
     private volatile FirebaseVisionFace firebaseVisionFace;
     private ArrayList<Journey> journeys = new ArrayList<>();
@@ -106,6 +97,15 @@ public class AppFunctionality extends AppCompatActivity {
 
         prevBlink = 0;
         mp = MediaPlayer.create(this, R.raw.bleep);
+
+        toSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR) {
+                    toSpeech.setLanguage(Locale.UK);
+                }
+            }
+        });
 
 
         super.onCreate(savedInstanceState);
@@ -336,14 +336,15 @@ public class AppFunctionality extends AppCompatActivity {
                                 }
                             }
                             if (timeBlinks.size() > 2) {
-                                for (int i :timeBlinks.keySet()) {
-                                    prevBlink =+ timeBlinks.get(i);
+                                for (int i : timeBlinks.keySet()) {
+                                    prevBlink += timeBlinks.get(i);
                                 }
                                 int avg = prevBlink / timeBlinks.size();
 
                                 if (currentBlink > avg) {
                                     Toast.makeText(this, "More Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
-                                    mp.start();
+                                    String toSpeak = "Blinks Increased";
+                                    toSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
                                 } else {
                                     Toast.makeText(this, "Less Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
 
@@ -386,11 +387,6 @@ public class AppFunctionality extends AppCompatActivity {
 
 //            Log.d(TAG, "Size: " + infor.size());
         }
-
-
-    }
-
-    private void monitorBlinks(HashMap<Integer, Integer> timeBlinks) {
 
 
     }

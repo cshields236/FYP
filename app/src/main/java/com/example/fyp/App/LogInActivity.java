@@ -10,15 +10,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fyp.Entities.User;
 import com.example.fyp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import dmax.dialog.SpotsDialog;
 
@@ -29,7 +35,8 @@ public class LogInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     EditText emailtxt;
     EditText passwordtxt;
-
+    Button signIn;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,8 @@ public class LogInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_log_in);
         Intent i = getIntent();
 
+
+        signIn = findViewById(R.id.lButton);
         if (i == null) {
             String e = i.getStringExtra("email");
             emailtxt.setText(e);
@@ -90,22 +99,35 @@ public class LogInActivity extends AppCompatActivity {
             Toast.makeText(LogInActivity.this, "Please Enter an Email and Password to Sign In", Toast.LENGTH_LONG).show();
         } else if (!((email.isEmpty() && password.isEmpty()))) {
 
-
+            signIn.setClickable(false);
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-
                         Log.d("", "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
+                        DocumentReference ref = db.collection("users").document(user.getUid());
 
-                        startActivity(new Intent(LogInActivity.this, DashboardActivity.class));
+                        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                User user = documentSnapshot.toObject(User.class);
+
+                                Intent i = new Intent(LogInActivity.this, DashboardActivity.class);
+                                i.putExtra("name", user.getFname());
+                                startActivity(i);
+                            }
+                        });
+
                     } else {
                         Log.w("", "signInWithEmail:failure", task.getException());
                         Toast.makeText(LogInActivity.this, "Authentication failed." + task.getException().getMessage(),
                                 Toast.LENGTH_SHORT).show();
 
+
                     }
+                    signIn.setClickable(true);
+
 
                 }
 
