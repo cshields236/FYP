@@ -64,7 +64,7 @@ public class JourneyRecap extends FragmentActivity implements OnMapReadyCallback
 
         long jl = intent.getLongExtra("length", 0);
 
-        ///Converting journey length from milliseconds to Time object
+        //Converting journey length from milliseconds to Time object
         String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(jl),
                 TimeUnit.MILLISECONDS.toMinutes(jl) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(jl)),
                 TimeUnit.MILLISECONDS.toSeconds(jl) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(jl)));

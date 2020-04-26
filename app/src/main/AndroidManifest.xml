@@ -7,6 +7,7 @@
          location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -16,14 +17,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".NavigationDrawer.Drawer"
-            android:label="@string/title_activity_drawer"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".App.EmergencyContact"></activity>
+
         <activity android:name=".App.PastJourney" />
         <activity android:name=".App.ViewJourneys" />
         <activity android:name=".App.TimerActivity" />
         <activity android:name=".App.JourneyRecap" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -42,6 +42,8 @@
         <activity android:name=".App.AppFunctionality" />
         <activity android:name=".App.RegisterActivity" />
         <activity android:name=".App.CameraActivity" />
+        <activity android:name=".App.ContactPickerActivity" />
+
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"

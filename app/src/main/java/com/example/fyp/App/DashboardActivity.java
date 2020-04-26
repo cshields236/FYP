@@ -99,7 +99,7 @@ public class DashboardActivity extends AppCompatActivity {
 
 
     public void launchStats(View v) {
-        Intent intent = new Intent(this, StatsActivity.class);
+        Intent intent = new Intent(this, ContactPickerActivity.class);
         startActivity(intent);
     }
 
