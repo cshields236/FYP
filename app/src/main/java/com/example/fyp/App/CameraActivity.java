@@ -95,8 +95,6 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
             faceGraphic.updateFace(face, frameMetadata.getCameraFacing());
 
 
-
-
                     AppFunctionality.getInstance().updateFace(face);
 
                 }

@@ -96,7 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
 
 
-                                Intent i = new Intent(RegisterActivity.this, AppFunctionality.class);
+                                Intent i = new Intent(RegisterActivity.this, DashboardActivity.class);
                                 startActivity(i);
 
 

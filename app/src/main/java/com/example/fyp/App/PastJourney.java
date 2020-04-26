@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.example.fyp.Entities.Journey;
@@ -54,7 +53,7 @@ public class PastJourney extends AppCompatActivity {
 // TODO View Specific Journey Information here
 //        Show Length of journey, blinks per min, graph of blinks
 
-        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        ref.orderBy("time").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -63,9 +62,11 @@ public class PastJourney extends AppCompatActivity {
                         js.add(information);
                     }
                     for (Journey j : js) {
-                        times.add(j.getTime().split(" ")[1].split(":")[0]);
+                        times.add(j.getTime().split(" ")[1].split(":")[0] +":"+ j.getTime().split(" ")[1].split(":")[1] );
 
                     }
+
+                    t.setText(times.toString());
 
 
             }

@@ -20,6 +20,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -42,10 +43,10 @@ public class ViewJourneys extends AppCompatActivity {
     private void initImageBitMaps() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference ref =   db.collection("users").document(user.getUid()).collection("Journeys");
+        CollectionReference ref = db.collection("users").document(user.getUid()).collection("Journeys");
 
         //Getting all journeys from database
-        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        ref.orderBy("time", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {

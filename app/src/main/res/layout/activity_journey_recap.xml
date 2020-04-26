@@ -8,18 +8,6 @@
     android:background="@drawable/bg">
 
     <TextView
-        style="@android:style/Widget.Holo.TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="10dp"
-        android:text="JOURNEY RECAP"
-        android:textAllCaps="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="30dp"
-        android:textStyle="bold" />
-
-    <TextView
         android:id="@+id/lbl1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -127,5 +115,29 @@
         android:layout_marginTop="45dp"
 
         android:paddingTop="70dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="0dp">
+
+        <TextView
+            style="@android:style/Widget.Holo.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="88dp"
+            android:paddingTop="10dp"
+            android:text="JOURNEY RECAP"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

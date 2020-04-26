@@ -255,7 +255,7 @@ public class AppFunctionality extends AppCompatActivity {
         intent.putExtra("length", difference);
         intent.putExtra("endLat", String.valueOf(lat1));
         intent.putExtra("endLng", String.valueOf(lng1));
-        intent.putExtra("startTime", ref.getId().split(" ")[1]);
+        intent.putExtra("startTime", infor.get(0).getTime().split(" ")[1]);
         intent.putExtra("endTime", infor.get(infor.size() - 1).getTime().split(" ")[1]);
         intent.putExtra("blinks", String.valueOf(Tblinks));
         intent.putExtra("warnings", String.valueOf(warnings));
@@ -431,33 +431,33 @@ public class AppFunctionality extends AppCompatActivity {
             }
         }
     }
-
-    public void flipCamera(View view) {
-        if (cameraSource.getCameraFacing() == CameraSource.CAMERA_FACING_FRONT) {
-
-            cameraSource.stop();
-            graphicOverlay.clear();
-
-            cameraSource = new CameraSource(this, graphicOverlay);
-
-
-            cameraSource.setMachineLearningFrameProcessor(new CameraActivity());
-            cameraSource.setFacing(CameraSource.CAMERA_FACING_BACK);
-
-            startCameraSource();
-        } else {
-
-            cameraSource.stop();
-            graphicOverlay.clear();
-            cameraSource = new CameraSource(this, graphicOverlay);
-
-
-            cameraSource.setMachineLearningFrameProcessor(new CameraActivity());
-            cameraSource.setFacing(CameraSource.CAMERA_FACING_FRONT);
-
-            startCameraSource();
-        }
-    }
+//
+//    public void flipCamera(View view) {
+//        if (cameraSource.getCameraFacing() == CameraSource.CAMERA_FACING_FRONT) {
+//
+//            cameraSource.stop();
+//            graphicOverlay.clear();
+//
+//            cameraSource = new CameraSource(this, graphicOverlay);
+//
+//
+//            cameraSource.setMachineLearningFrameProcessor(new CameraActivity());
+//            cameraSource.setFacing(CameraSource.CAMERA_FACING_BACK);
+//
+//            startCameraSource();
+//        } else {
+//
+//            cameraSource.stop();
+//            graphicOverlay.clear();
+//            cameraSource = new CameraSource(this, graphicOverlay);
+//
+//
+//            cameraSource.setMachineLearningFrameProcessor(new CameraActivity());
+//            cameraSource.setFacing(CameraSource.CAMERA_FACING_FRONT);
+//
+//            startCameraSource();
+//        }
+//    }
 
     private String[] getRequiredPermissions() {
         try {

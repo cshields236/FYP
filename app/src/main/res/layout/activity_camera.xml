@@ -36,21 +36,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
- 
-
-    <ImageView
-        android:id="@+id/btnFlip"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/firePreview"
-        android:layout_marginStart="180dp"
-        android:layout_marginBottom="120dp"
-        android:onClick="flipCamera"
-        android:scaleType="fitXY"
-        android:src="@drawable/camera"
-        android:text="Finish"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <com.example.fyp.Helper.CameraSourcePreview
         android:id="@+id/firePreview"

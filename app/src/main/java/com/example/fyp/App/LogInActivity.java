@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -99,7 +102,9 @@ public class LogInActivity extends AppCompatActivity {
             Toast.makeText(LogInActivity.this, "Please Enter an Email and Password to Sign In", Toast.LENGTH_LONG).show();
         } else if (!((email.isEmpty() && password.isEmpty()))) {
 
-            signIn.setClickable(false);
+
+
+
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -123,7 +128,6 @@ public class LogInActivity extends AppCompatActivity {
                         Log.w("", "signInWithEmail:failure", task.getException());
                         Toast.makeText(LogInActivity.this, "Authentication failed." + task.getException().getMessage(),
                                 Toast.LENGTH_SHORT).show();
-
 
                     }
                     signIn.setClickable(true);

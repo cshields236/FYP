@@ -107,13 +107,13 @@ z
 
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/graphic"
+                        android:src="@drawable/emergency"
                         />
                     <TextView
                         android:paddingTop="25dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="View Statistics"
+                        android:text="Emergency Contact"
                         android:textAlignment="center"
                         />
                 </LinearLayout>

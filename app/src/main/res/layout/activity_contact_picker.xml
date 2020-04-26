@@ -120,14 +120,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginEnd="80dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="70dp"
         android:background="@drawable/header_bg"
         android:drawableLeft="@drawable/baseline_edit_24"
         android:padding="10dp"
         android:text="Pick Contact"
+        app:layout_constraintBottom_toTopOf="@+id/callButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/callButton" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/callButton"
@@ -135,7 +135,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginEnd="80dp"
-        android:layout_marginBottom="88dp"
+        android:layout_marginBottom="95dp"
         android:background="@drawable/header_bg"
         android:padding="10dp"
         android:text="call"
