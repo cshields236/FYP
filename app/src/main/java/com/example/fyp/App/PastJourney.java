@@ -30,7 +30,8 @@ public class PastJourney extends AppCompatActivity {
     ArrayList<Journey> js = new ArrayList<>();
     TextView t;
     ArrayList<String> times = new ArrayList<>();
-    ArrayList<String> blinks = new ArrayList<>();
+    ArrayList<Integer> blinks = new ArrayList<>();
+
     private ArrayList<JourneyInformation> journeys = new ArrayList<>();
 
 
@@ -43,7 +44,6 @@ public class PastJourney extends AppCompatActivity {
         Intent i = getIntent();
         String j = i.getStringExtra("journ");
         t.setText(j);
-
 
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -62,25 +62,24 @@ public class PastJourney extends AppCompatActivity {
                         js.add(information);
                     }
                     for (Journey j : js) {
-                        times.add(j.getTime().split(" ")[1].split(":")[0] +":"+ j.getTime().split(" ")[1].split(":")[1] );
-
+                        times.add(j.getTime().split(" ")[1].split(":")[0] + ":" + j.getTime().split(" ")[1].split(":")[1]);
+                        journeys = (ArrayList<JourneyInformation>) j.getJourneyInformationss();
+                    }
+                    for (JourneyInformation inf : journeys) {
+                        blinks.add(inf.getBlink());
                     }
 
-                    t.setText(times.toString());
-
+                    t.setText("" + blinks.size());
+                }
 
             }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
 
-        }
-    }).
-
-    addOnFailureListener(new OnFailureListener() {
-        @Override
-        public void onFailure (@NonNull Exception e){
-
-        }
-    });
+            }
+        });
 
 
-}
+    }
 }

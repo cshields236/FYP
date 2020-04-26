@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -27,6 +28,7 @@ import com.example.fyp.Entities.Journey;
 import com.example.fyp.Entities.JourneyInformation;
 import com.example.fyp.Helper.CameraSourcePreview;
 import com.example.fyp.Helper.GraphicOverlay;
+import com.example.fyp.Helper.PrefsHelper;
 import com.example.fyp.R;
 import com.example.fyp.Helper.CameraSource;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -69,7 +71,9 @@ public class AppFunctionality extends AppCompatActivity {
     private int warnings;
     double lat, lat1;
     double lng, lng1;
-
+    PrefsHelper prefsHelper;
+    String phoneNo;
+    String message;
 
     int mincounter = 0;
     int counter = 0;
@@ -86,6 +90,7 @@ public class AppFunctionality extends AppCompatActivity {
     int Tblinks;
 
     private HashMap<Integer, Integer> timeBlinks = new HashMap<Integer, Integer>();
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
 
     public AppFunctionality() {
 
@@ -93,7 +98,11 @@ public class AppFunctionality extends AppCompatActivity {
     }
 
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_camera);
         activityA = this;
+        prefsHelper = new PrefsHelper(this);
+        phoneNo = prefsHelper.getEmergencyContactNumber();
 
         prevBlink = 0;
         mp = MediaPlayer.create(this, R.raw.bleep);
@@ -108,8 +117,6 @@ public class AppFunctionality extends AppCompatActivity {
         });
 
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         preview = findViewById(R.id.firePreview);
@@ -262,6 +269,7 @@ public class AppFunctionality extends AppCompatActivity {
 
         startActivity(intent);
 
+        sendSMSMessage();
 
         finish();
     }
@@ -402,6 +410,30 @@ public class AppFunctionality extends AppCompatActivity {
     }
 
 
+    protected void sendSMSMessage() {
+        message = "test message from Conor's FYP";
+
+        SmsManager smgr = SmsManager.getDefault();
+        smgr.sendTextMessage(phoneNo, null, message, null, null);
+        Toast.makeText(AppFunctionality.this, "SMS Sent Successfully", Toast.LENGTH_SHORT).show();
+    }
+
+
+
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, String[] permissions, int[] grantResults) {
+
+
+        Log.i(TAG, "Permission granted!");
+        if (allPermissionsGranted()) {
+            createCameraSource();
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+
     public void createCameraSource() {
 
         cameraSource = new CameraSource(this, graphicOverlay);
@@ -431,35 +463,10 @@ public class AppFunctionality extends AppCompatActivity {
             }
         }
     }
-//
-//    public void flipCamera(View view) {
-//        if (cameraSource.getCameraFacing() == CameraSource.CAMERA_FACING_FRONT) {
-//
-//            cameraSource.stop();
-//            graphicOverlay.clear();
-//
-//            cameraSource = new CameraSource(this, graphicOverlay);
-//
-//
-//            cameraSource.setMachineLearningFrameProcessor(new CameraActivity());
-//            cameraSource.setFacing(CameraSource.CAMERA_FACING_BACK);
-//
-//            startCameraSource();
-//        } else {
-//
-//            cameraSource.stop();
-//            graphicOverlay.clear();
-//            cameraSource = new CameraSource(this, graphicOverlay);
-//
-//
-//            cameraSource.setMachineLearningFrameProcessor(new CameraActivity());
-//            cameraSource.setFacing(CameraSource.CAMERA_FACING_FRONT);
-//
-//            startCameraSource();
-//        }
-//    }
 
     private String[] getRequiredPermissions() {
+
+
         try {
             PackageInfo info =
                     this.getPackageManager()
@@ -499,15 +506,6 @@ public class AppFunctionality extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(
-            int requestCode, String[] permissions, int[] grantResults) {
-        Log.i(TAG, "Permission granted!");
-        if (allPermissionsGranted()) {
-            createCameraSource();
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
 
     private static boolean isPermissionGranted(Context context, String permission) {
         if (ContextCompat.checkSelfPermission(context, permission)
