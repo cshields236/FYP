@@ -7,7 +7,8 @@ public class PrefsHelper {
     public static final String EMERGENCY_NAME = "name";
     public static final String EMERGENCY_NUMBER = "number";
     public static final String PREF_NAME = "LocationPreferenceFile";
-
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
 
     static SharedPreferences pref;
     static SharedPreferences.Editor editor;
@@ -41,6 +42,26 @@ public class PrefsHelper {
         editor.apply();
     }
 
+    public static String getLatitude()
+    {
+        return pref.getString(LATITUDE, null);
+    }
+
+    public static String getLongitude()
+    {
+        return pref.getString(LONGITUDE, null);
+    }
+
+    public  void setLatitude(String latitude)
+    {
+        editor.putString(LATITUDE, latitude);
+        editor.apply();
+    }
+    public  void setLongitude(String longitude)
+    {
+        editor.putString(LONGITUDE, longitude);
+        editor.apply();
+    }
 
 
 

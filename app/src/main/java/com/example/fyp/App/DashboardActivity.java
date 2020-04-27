@@ -6,28 +6,21 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.example.fyp.Entities.User;
 import com.example.fyp.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -45,10 +38,11 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
 
+
         Intent i = getIntent();
 
         lbl = findViewById(R.id.dashboardLbl);
-        lbl.setText("Hello, " + i.getStringExtra("name") );
+        lbl.setText("Hello, " + i.getStringExtra("name"));
 
 
         LocationRequest mLocationRequest = new LocationRequest();
@@ -80,14 +74,14 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
 
-       CardView mapsBtn = findViewById(R.id.imageView4);
+        CardView mapsBtn = findViewById(R.id.imageView4);
 
         mapsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardActivity.this, MapsActivity.class);
-                intent.putExtra("Lat", String.valueOf(lat));
-                intent.putExtra("Long", String.valueOf(lng));
+                Intent intent = new Intent(DashboardActivity.this, CoffeeSuggestionsActivity.class);
+//                intent.putExtra("Lat", String.valueOf(lat));
+//                intent.putExtra("Long", String.valueOf(lng));
                 startActivity(intent);
 
 
@@ -98,7 +92,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
 
-    public void launchStats(View v) {
+    public void launchEmergencyContact(View v) {
         Intent intent = new Intent(this, ContactPickerActivity.class);
         startActivity(intent);
     }

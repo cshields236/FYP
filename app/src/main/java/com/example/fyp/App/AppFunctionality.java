@@ -26,11 +26,12 @@ import androidx.core.content.ContextCompat;
 
 import com.example.fyp.Entities.Journey;
 import com.example.fyp.Entities.JourneyInformation;
+import com.example.fyp.Entities.User;
+import com.example.fyp.Helper.CameraSource;
 import com.example.fyp.Helper.CameraSourcePreview;
 import com.example.fyp.Helper.GraphicOverlay;
 import com.example.fyp.Helper.PrefsHelper;
 import com.example.fyp.R;
-import com.example.fyp.Helper.CameraSource;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -41,6 +42,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 
@@ -100,6 +102,7 @@ public class AppFunctionality extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
         activityA = this;
         prefsHelper = new PrefsHelper(this);
         phoneNo = prefsHelper.getEmergencyContactNumber();
@@ -269,7 +272,6 @@ public class AppFunctionality extends AppCompatActivity {
 
         startActivity(intent);
 
-        sendSMSMessage();
 
         finish();
     }
@@ -346,7 +348,9 @@ public class AppFunctionality extends AppCompatActivity {
                             if (timeBlinks.size() == 2) {
                                 if (timeBlinks.get(1) < currentBlink) {
                                     Toast.makeText(this, "More Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
-                                    mp.start();
+                                    String toSpeak = "Blinks Increased";
+                                    warnings++;
+                                    toSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
                                 } else {
                                     Toast.makeText(this, "Less Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
                                 }
@@ -369,6 +373,9 @@ public class AppFunctionality extends AppCompatActivity {
                             }
                         }
 
+                        if (warnings > 10){
+                            sendSMSMessage();
+                        }
                     }
 
 
@@ -411,14 +418,23 @@ public class AppFunctionality extends AppCompatActivity {
 
 
     protected void sendSMSMessage() {
-        message = "test message from Conor's FYP";
+        DocumentReference ref = db.collection("users").document(user.getUid());
+        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
 
-        SmsManager smgr = SmsManager.getDefault();
-        smgr.sendTextMessage(phoneNo, null, message, null, null);
-        Toast.makeText(AppFunctionality.this, "SMS Sent Successfully", Toast.LENGTH_SHORT).show();
+                message = "This is an automated warning message from Stay Awake, Drive Safe application. " + user.getFname() + " has been showing signs of fatigue,check in on him.";
+
+                SmsManager smgr = SmsManager.getDefault();
+                smgr.sendTextMessage(phoneNo, null, message, null, null);
+                Toast.makeText(AppFunctionality.this, "SMS Sent Successfully", Toast.LENGTH_SHORT).show();
+            }
+
+
+        });
+
     }
-
-
 
 
     @Override

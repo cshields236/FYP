@@ -18,12 +18,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".App.CoffeeSuggestionsActivity"></activity>
         <activity android:name=".App.PastJourney" />
         <activity android:name=".App.ViewJourneys" />
         <activity android:name=".App.TimerActivity" />
         <activity android:name=".App.JourneyRecap" />
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -36,14 +35,28 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB2JBiS8RCCeS8r4G7uSjvXeZTINtXFoBI" />
 
-        <activity android:name=".App.MapsActivity" />
-        <activity android:name=".App.DashboardActivity" />
-        <activity android:name=".App.StatsActivity" />
-        <activity android:name=".App.AppFunctionality" />
-        <activity android:name=".App.RegisterActivity" />
-        <activity android:name=".App.CameraActivity" />
-        <activity android:name=".App.ContactPickerActivity" />
-
+        <activity
+            android:name=".App.MapsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".App.DashboardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".App.StatsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".App.AppFunctionality"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".App.RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".App.CameraActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".App.ContactPickerActivity"
+            android:parentActivityName=".App.DashboardActivity"
+            android:theme="@style/AppTheme.AppBarOverlay" />
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"

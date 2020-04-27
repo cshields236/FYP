@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.example.fyp.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 
@@ -73,11 +74,6 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
         float y = translateY(face.getBoundingBox().centerY());
       //  canvas.drawCircle(x, y, FACE_POSITION_RADIUS, facePositionPaint);
         canvas.drawText("id: " + face.getTrackingId(), x + ID_X_OFFSET, y + ID_Y_OFFSET, idPaint);
-//        canvas.drawText(
-//                "happiness: " + String.format("%.2f", face.getSmilingProbability()),
-//                x + ID_X_OFFSET ,
-//                y - ID_Y_OFFSET,
-//                idPaint);
         if (facing == CameraSource.CAMERA_FACING_FRONT) {
             canvas.drawText(
                     "right eye: " + String.format("%.2f", face.getRightEyeOpenProbability()),
@@ -86,7 +82,7 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
                     idPaint);
             canvas.drawText(
                     "left eye: " + String.format("%.2f", face.getLeftEyeOpenProbability()),
-                    x + ID_X_OFFSET * 6,
+                    x + ID_X_OFFSET * 5,
                     y,
                     idPaint);
         } else {
@@ -97,19 +93,21 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
                     idPaint);
             canvas.drawText(
                     "right eye: " + String.format("%.2f", face.getRightEyeOpenProbability()),
-                    x + ID_X_OFFSET * 6,
+                    x + ID_X_OFFSET * 5,
                     y,
                     idPaint);
         }
 
         // Draws a bounding box around the face.
-        float xOffset = scaleX(face.getBoundingBox().width()/2);
-        float yOffset = scaleY(face.getBoundingBox().height()/2);
+        float xOffset = scaleX((float) (face.getBoundingBox().width()/ 1.8));
+        float yOffset = scaleY((float) (face.getBoundingBox().height() /1.8));
         float left = x - xOffset ;
         float top = y - yOffset ;
-        float right = x + xOffset ;
+                float right = x + xOffset ;
         float bottom = y + yOffset;
+
         canvas.drawRect(left, top, right, bottom, boxPaint);
+
     }
 }
 

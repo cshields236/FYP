@@ -8,6 +8,7 @@
     android:id="@+id/contact_picker_main_layout"
     tools:context=".App.ContactPickerActivity">
 
+
     <TextView
         android:id="@+id/contactMessageTextView"
         android:layout_width="0dp"
@@ -26,6 +27,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
+        android:paddingTop="100dp"
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -42,34 +44,37 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="55dp"
+                android:paddingTop="100dp">
+
 
                 <RelativeLayout
+                    android:id="@+id/no_contact_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="150dp"
-                    android:id="@+id/no_contact_layout"
                     android:gravity="center"
+                    android:minHeight="150dp"
                     android:paddingTop="20dp"
                     android:paddingBottom="20dp"
                     android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
+                        android:text="Please choose an Emergency Contact"
                         android:textAlignment="center"
                         android:textSize="22dp"
-                        android:text="Please choose an Emergency Contact"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -80,6 +85,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
+
                 android:id="@+id/contact_details_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
