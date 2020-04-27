@@ -8,24 +8,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.example.fyp.Adapters.CustomAdapter;
+import com.example.fyp.Adapters.CoffeeAdapter;
 import com.example.fyp.Entities.places;
 import com.example.fyp.Helper.PrefsHelper;
 import com.example.fyp.R;
@@ -40,7 +35,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class CoffeeSuggestionsActivity extends AppCompatActivity {
 
@@ -55,7 +49,6 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coffee_suggestions);
         prefsHelper = new PrefsHelper(this);
-        optionClickListener = new optionClickedListener(this);
 
         progressBarMain = new ProgressBar(CoffeeSuggestionsActivity.this);
         ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.coffeeSuggestionLayout);
@@ -175,7 +168,7 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
 
     private void fillLayoutOptions() {
 
-        RecyclerView.Adapter adapter = new CustomAdapter(placeList);
+        RecyclerView.Adapter adapter = new CoffeeAdapter(placeList);
         recyclerView.setAdapter(adapter);
     }
 
@@ -232,35 +225,7 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
     }
 
 
-    public class optionClickedListener implements View.OnClickListener{
 
-        private final Context context;
-
-        private optionClickedListener(Context contextValue){
-
-            this.context=contextValue;
-        }
-        @Override
-        public void onClick(View v) {
-
-            Toast.makeText(getApplicationContext(),"clicked option", Toast.LENGTH_SHORT).show();
-            int selectedItem = recyclerView.getChildAdapterPosition(v);
-            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(selectedItem);
-
-            places selectedOption = placeList.get(selectedItem);
-
-            String latitude = selectedOption.getLatitude();
-            String longitude = selectedOption.getLongitude();
-
-            Log.d("clicked ", latitude);
-            Log.d("clicked ", longitude);
-            Uri gmmIntentUri = Uri.parse("google.navigation:q="+latitude+","+longitude);
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-            mapIntent.setPackage("com.google.android.apps.maps");
-            startActivity(mapIntent);
-
-        }
-    }
 
 
 }

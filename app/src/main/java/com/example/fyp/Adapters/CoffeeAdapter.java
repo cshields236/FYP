@@ -9,15 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.example.fyp.App.CoffeeSuggestionsActivity;
 import com.example.fyp.Entities.places;
 import com.example.fyp.R;
 
 import java.util.ArrayList;
 
-import static com.example.fyp.App.CoffeeSuggestionsActivity.*;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
+public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.MyViewHolder> {
 
     private ArrayList<places> dataSet;
 
@@ -31,27 +29,26 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            this.textViewPlaceName = (TextView) itemView.findViewById(R.id.placeNameTextView);
-            this.textViewPlaceRating = (TextView) itemView.findViewById(R.id.placeRatingTextView);
-            this.textViewPlaceVicinity = (TextView) itemView.findViewById(R.id.placeVicinityTextView);
+            this.textViewPlaceName = itemView.findViewById(R.id.placeNameTextView);
+            this.textViewPlaceRating =  itemView.findViewById(R.id.placeRatingTextView);
+            this.textViewPlaceVicinity =  itemView.findViewById(R.id.placeVicinityTextView);
         }
     }
 
-    public CustomAdapter(ArrayList<places> data){
+    public CoffeeAdapter(ArrayList<places> data){
         this.dataSet=data;
     }
 
     @NonNull
     @Override
-    public CustomAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CoffeeAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cards_layout, parent, false);
-        view.setOnClickListener(CoffeeSuggestionsActivity.optionClickListener);
         MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CustomAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CoffeeAdapter.MyViewHolder holder, int position) {
         TextView textViewPlaceName = holder.textViewPlaceName;
         TextView textViewPlaceRating = holder.textViewPlaceRating;
         TextView textViewPlaceVicinity = holder.textViewPlaceVicinity;
