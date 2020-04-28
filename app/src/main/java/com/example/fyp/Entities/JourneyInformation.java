@@ -13,15 +13,6 @@ public class JourneyInformation implements Parcelable {
     private int blink;
     private boolean isBlinking;
 
-    public JourneyInformation(String name, String time, double leftEye, double rightEye, int blink, boolean isBlinking) {
-        this.name = name;
-        this.time = time;
-        this.leftEye = leftEye;
-        this.rightEye = rightEye;
-        this.blink = blink;
-        this.isBlinking = isBlinking;
-    }
-
 
 
     public JourneyInformation() {

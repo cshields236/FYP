@@ -1,28 +1,16 @@
 package com.example.fyp.App;
 
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.os.Handler;
 import android.util.Log;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 
-import com.example.fyp.Entities.Journey;
-import com.example.fyp.Entities.JourneyInformation;
 import com.example.fyp.Helper.FaceGraphic;
 import com.example.fyp.Helper.FrameMetadata;
 import com.example.fyp.Helper.GraphicOverlay;
 import com.example.fyp.Helper.VisionProcessorBase;
-import com.example.fyp.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
@@ -30,10 +18,6 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>> {
@@ -95,7 +79,7 @@ public class CameraActivity extends VisionProcessorBase<List<FirebaseVisionFace>
             faceGraphic.updateFace(face, frameMetadata.getCameraFacing());
 
 
-                    AppFunctionality.getInstance().updateFace(face);
+                    JourneyFunctionality.getInstance().updateFace(face);
 
                 }
 

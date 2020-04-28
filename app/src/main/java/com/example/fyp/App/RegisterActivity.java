@@ -95,28 +95,20 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
 
-
                                 Intent i = new Intent(RegisterActivity.this, DashboardActivity.class);
                                 startActivity(i);
 
-
-                                // Create a new user with a first and last name
-
+                                // Get reference to database
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-
 
                                 Log.d("", "createUserWithEmail:success");
                                 FirebaseUser u = mAuth.getCurrentUser();
-
-
+                                // User Details gotten from textfields above
                                 User u1 = new User();
-
                                 u1.setId(u.getUid());
                                 u1.setFname(fname);
                                 u1.setLastName(lname);
                                 u1.setEmail(email);
-
-
                                 // Add a new document with ID from the Authenticator
                                 db.collection("users").document(u.getUid())
                                         .set(u1).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -131,12 +123,11 @@ public class RegisterActivity extends AppCompatActivity {
                                     }
                                 });
 
-
                                 Log.d(TAG, "onComplete: " + "created");
 
                             } else {
                                 Log.w("", "createUserWithEmail:failure", task.getException());
-
+                                // Show user error message
                                 Toast.makeText(RegisterActivity.this, "Authentication failed." + task.getException().getMessage(),
                                         Toast.LENGTH_LONG).show();
 

@@ -54,7 +54,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class AppFunctionality extends AppCompatActivity {
+public class JourneyFunctionality extends AppCompatActivity {
     private static final int PERMISSION_REQUESTS = 0;
     static String TAG = "AppFunct";
     private CameraSource cameraSource = null;
@@ -69,7 +69,7 @@ public class AppFunctionality extends AppCompatActivity {
     private volatile FirebaseVisionFace firebaseVisionFace;
     private ArrayList<Journey> journeys = new ArrayList<>();
     long difference = 0;
-    static AppFunctionality activityA;
+    static JourneyFunctionality activityA;
     private int warnings;
     double lat, lat1;
     double lng, lng1;
@@ -94,7 +94,7 @@ public class AppFunctionality extends AppCompatActivity {
     private HashMap<Integer, Integer> timeBlinks = new HashMap<Integer, Integer>();
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
 
-    public AppFunctionality() {
+    public JourneyFunctionality() {
 
 
     }
@@ -147,8 +147,8 @@ public class AppFunctionality extends AppCompatActivity {
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
 
-        FusedLocationProviderClient mFusedLocationClient = new FusedLocationProviderClient(AppFunctionality.this);
-        if (ContextCompat.checkSelfPermission(AppFunctionality.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        FusedLocationProviderClient mFusedLocationClient = new FusedLocationProviderClient(JourneyFunctionality.this);
+        if (ContextCompat.checkSelfPermission(JourneyFunctionality.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult l) {
@@ -207,8 +207,8 @@ public class AppFunctionality extends AppCompatActivity {
         cancel.setClickable(false);
 
 
-        FusedLocationProviderClient mFusedLocationClient = new FusedLocationProviderClient(AppFunctionality.this);
-        if (ContextCompat.checkSelfPermission(AppFunctionality.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        FusedLocationProviderClient mFusedLocationClient = new FusedLocationProviderClient(JourneyFunctionality.this);
+        if (ContextCompat.checkSelfPermission(JourneyFunctionality.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult l) {
@@ -225,9 +225,9 @@ public class AppFunctionality extends AppCompatActivity {
 
 
             ActivityCompat.requestPermissions
-                    (AppFunctionality.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1
+                    (JourneyFunctionality.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1
                     );
-            Toast.makeText(AppFunctionality.this, "Coordinate", Toast.LENGTH_LONG).show();
+            Toast.makeText(JourneyFunctionality.this, "Coordinate", Toast.LENGTH_LONG).show();
         }
 
         clicked = true;
@@ -257,7 +257,7 @@ public class AppFunctionality extends AppCompatActivity {
         long difference = date2.getTime() - date1.getTime();
 
         Log.d(TAG, "EndJourney: " + difference);
-        Intent intent = new Intent(AppFunctionality.this, JourneyRecap.class);
+        Intent intent = new Intent(JourneyFunctionality.this, JourneyRecap.class);
 
 
         intent.putExtra("Lat", String.valueOf(lat));
@@ -340,7 +340,7 @@ public class AppFunctionality extends AppCompatActivity {
 
                         mincounter++;
                         timeBlinks.put(mincounter, blinks);
-                        Log.d(TAG, "Blinky Hashmap: " + timeBlinks);
+                        Log.d(TAG, "Blinky map: " + timeBlinks);
                         blinks = 0;
 
                         if (!timeBlinks.isEmpty()) {
@@ -358,12 +358,18 @@ public class AppFunctionality extends AppCompatActivity {
                             if (timeBlinks.size() > 2) {
                                 for (int i : timeBlinks.keySet()) {
                                     prevBlink += timeBlinks.get(i);
-                                }
-                                int avg = prevBlink / timeBlinks.size();
+                                    Log.d(TAG, "prev: " + prevBlink);
+                                Log.d(TAG, "prev: " + timeBlinks.get(i));
+                            }
+
+                                int avg = prevBlink / timeBlinks.get(timeBlinks.size()-1);
+                                Log.d(TAG, "prev: " + prevBlink);
+                                Log.d(TAG, "total: " + avg);
+                                Log.d(TAG, "AVERAGE: " + timeBlinks.get(timeBlinks.size()-1));
 
                                 if (currentBlink > avg) {
                                     Toast.makeText(this, "More Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
-                                    String toSpeak = "Blinks Increased";
+                                    String toSpeak = "You Are Showing Signs Of Fatigue";
                                     toSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
                                     warnings++;
                                 } else {
@@ -375,6 +381,8 @@ public class AppFunctionality extends AppCompatActivity {
 
                         if (warnings > 10){
                             sendSMSMessage();
+                            String toSpeak = "Message Sent to Emergency Contact";
+                            toSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
                         }
                     }
 
@@ -391,7 +399,7 @@ public class AppFunctionality extends AppCompatActivity {
                     public void onSuccess(DocumentReference documentReference) {
                         infor.clear();
                         counter = 0;
-                        Toast.makeText(AppFunctionality.this, "Added To DB", Toast.LENGTH_SHORT);
+                        Toast.makeText(JourneyFunctionality.this, "Added To DB", Toast.LENGTH_SHORT);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -403,12 +411,12 @@ public class AppFunctionality extends AppCompatActivity {
             }
 
 
-            if (infor.size() > 5) {
-                if (infor.get(infor.size() - 1).getLeftEye() < .2 && infor.get(infor.size() - 2).getLeftEye() < .2 && infor.get(infor.size() - 3).getLeftEye() < .2 && infor.get(infor.size() - 4).getLeftEye() < .2 && infor.get(infor.size() - 5).getLeftEye() < .2) {
-                    mp.start();
-                }
-
-            }
+//            if (infor.size() > 5) {
+//                if (infor.get(infor.size() - 1).getLeftEye() < .2 && infor.get(infor.size() - 2).getLeftEye() < .2 && infor.get(infor.size() - 3).getLeftEye() < .2 && infor.get(infor.size() - 4).getLeftEye() < .2 && infor.get(infor.size() - 5).getLeftEye() < .2) {
+//                    mp.start();
+//                }
+//
+//            }
 
 //            Log.d(TAG, "Size: " + infor.size());
         }
@@ -428,7 +436,7 @@ public class AppFunctionality extends AppCompatActivity {
 
                 SmsManager smgr = SmsManager.getDefault();
                 smgr.sendTextMessage(phoneNo, null, message, null, null);
-                Toast.makeText(AppFunctionality.this, "SMS Sent Successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(JourneyFunctionality.this, "SMS Sent Successfully", Toast.LENGTH_SHORT).show();
             }
 
 
@@ -534,7 +542,7 @@ public class AppFunctionality extends AppCompatActivity {
     }
 
 
-    public static AppFunctionality getInstance() {
+    public static JourneyFunctionality getInstance() {
         return activityA;
     }
 }

@@ -75,7 +75,7 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
     }
 
     public void getCurrentLocation() throws IOException {
-        Log.d("getCurrentLocation", "inside get nearby coffee shops function");
+
 
         String latitude = prefsHelper.getLatitude();
         String longitude = prefsHelper.getLongitude();
@@ -186,7 +186,7 @@ public class CoffeeSuggestionsActivity extends AppCompatActivity {
         //build url
        final String maps_key = this.getResources().getString(R.string.google_api_key);
         URL url = new URL("https://maps.googleapis.com/maps/api/place/nearbysearch/json?key="
-                +maps_key+"&location="+latitude+","+longitude+"&keyword=coffee&radius=20000");
+                +maps_key+"&location="+latitude+","+longitude+"&keyword=coffee&radius=20000&keyword=petrol+station&radius=5000");
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         Log.d("requestUrl", urlConnection.toString());
         urlConnection.connect();

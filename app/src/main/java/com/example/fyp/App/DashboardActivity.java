@@ -6,7 +6,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -98,7 +97,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     public void launchFaceTrcker(View view) {
-        Intent i = new Intent(this, AppFunctionality.class);
+        Intent i = new Intent(this, JourneyFunctionality.class);
         startActivity(i);
     }
 
