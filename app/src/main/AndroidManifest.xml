@@ -48,16 +48,13 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".App.JourneyFunctionalityActivity"
-            android:parentActivityName=".App.DashboardActivity"
-            android:theme="@style/AppTheme.AppBarOverlay"
+
             android:screenOrientation="portrait" />
         <activity
             android:name=".App.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".App.CameraActivity"
-            android:parentActivityName=".App.DashboardActivity"
-            android:theme="@style/AppTheme.AppBarOverlay"
             android:screenOrientation="portrait" />
         <activity
             android:name=".App.ContactPickerActivity"

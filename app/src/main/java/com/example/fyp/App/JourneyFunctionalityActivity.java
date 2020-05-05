@@ -76,6 +76,7 @@ public class JourneyFunctionalityActivity extends AppCompatActivity {
     double lng, lng1;
     PrefsHelper prefsHelper;
     String phoneNo;
+    double percentIncrease;
     String message;
 
     int mincounter = 0;
@@ -374,7 +375,7 @@ public class JourneyFunctionalityActivity extends AppCompatActivity {
                                     Toast.makeText(this, "Less Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            if (timeBlinks.size() > 2) {
+                            if (timeBlinks.size() > 2 ) {
                                 // Get all previous blink numbers
                                 for (int i : timeBlinks.keySet()) {
                                     recent =  timeBlinks.get(i);
@@ -389,8 +390,15 @@ public class JourneyFunctionalityActivity extends AppCompatActivity {
 
                                 // if the current number of blinks is greater than the average alert the driver
 
+                                    int diff = currentBlink - avg;
+                                Log.d(TAG, "Differnce: " + diff);
+                                    if (diff > 0 && avg > 0)
+                                    {
+                                         percentIncrease =  (diff / currentBlink ) * 100;
+                                    }
+                                Log.d(TAG, "percent differnce: " + percentIncrease);
 
-                                if (currentBlink > avg) {
+                                if (percentIncrease > 20) {
                                     Toast.makeText(this, "More Blinks: " + avg + " " + timeBlinks.get(timeBlinks.size() - 1), Toast.LENGTH_SHORT).show();
                                     String toSpeak = "You Are Showing Signs Of Fatigue";
                                     toSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
