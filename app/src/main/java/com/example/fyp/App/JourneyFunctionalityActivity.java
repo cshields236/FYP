@@ -20,12 +20,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.fyp.Entities.FaceInformation;
 import com.example.fyp.Entities.Journey;
-import com.example.fyp.Entities.JourneyInformation;
 import com.example.fyp.Entities.User;
 import com.example.fyp.Helper.CameraSource;
 import com.example.fyp.Helper.CameraSourcePreview;
@@ -54,7 +55,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class JourneyFunctionality extends AppCompatActivity {
+public class JourneyFunctionalityActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUESTS = 0;
     static String TAG = "AppFunct";
     private CameraSource cameraSource = null;
@@ -63,13 +64,13 @@ public class JourneyFunctionality extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     CameraActivity activity;
     private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    ArrayList<JourneyInformation> infor = new ArrayList<>();
+    ArrayList<FaceInformation> infor = new ArrayList<>();
     TextToSpeech toSpeech;
     private int prevBlink;
     private volatile FirebaseVisionFace firebaseVisionFace;
     private ArrayList<Journey> journeys = new ArrayList<>();
     long difference = 0;
-    static JourneyFunctionality activityA;
+    static JourneyFunctionalityActivity activityA;
     private int warnings;
     double lat, lat1;
     double lng, lng1;
@@ -84,6 +85,7 @@ public class JourneyFunctionality extends AppCompatActivity {
     ImageView start;
 
     boolean clicked = false;
+    boolean msgSent = false;
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
     MediaPlayer mp;
     DocumentReference ref;
@@ -94,7 +96,7 @@ public class JourneyFunctionality extends AppCompatActivity {
     private HashMap<Integer, Integer> timeBlinks = new HashMap<Integer, Integer>();
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
 
-    public JourneyFunctionality() {
+    public JourneyFunctionalityActivity() {
 
 
     }
@@ -102,6 +104,7 @@ public class JourneyFunctionality extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+        prevBlink = 0;
 
         activityA = this;
         prefsHelper = new PrefsHelper(this);
@@ -110,6 +113,7 @@ public class JourneyFunctionality extends AppCompatActivity {
         prevBlink = 0;
         mp = MediaPlayer.create(this, R.raw.bleep);
 
+        // Declare text to speech
         toSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -119,7 +123,7 @@ public class JourneyFunctionality extends AppCompatActivity {
             }
         });
 
-
+        // Ensure phone does not enter sleep mode
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         preview = findViewById(R.id.firePreview);
@@ -141,14 +145,16 @@ public class JourneyFunctionality extends AppCompatActivity {
 
 
         blinks = 0;
+
+        //find current location
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
 
-        FusedLocationProviderClient mFusedLocationClient = new FusedLocationProviderClient(JourneyFunctionality.this);
-        if (ContextCompat.checkSelfPermission(JourneyFunctionality.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        FusedLocationProviderClient mFusedLocationClient = new FusedLocationProviderClient(JourneyFunctionalityActivity.this);
+        if (ContextCompat.checkSelfPermission(JourneyFunctionalityActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult l) {
@@ -166,6 +172,7 @@ public class JourneyFunctionality extends AppCompatActivity {
     }
 
     public void StartJourney(View view) {
+        prevBlink = 0;
 
         blinks = 0;
         journeys = new ArrayList<>();
@@ -175,11 +182,17 @@ public class JourneyFunctionality extends AppCompatActivity {
 
 
             String time = sdf.format(date);
+
+            // Declare both database references that will be used to write to DB,
+            // Ref1 to declare that a journey has started and create the journey object
+            // Ref to is where the specific face information from the journey is added to
             ref = db.collection("users").document(user.getUid()).collection("Journeys").document(time);
 
 
             ref1 = db.collection("users").document(user.getUid()).collection("Journeys").document(ref.getId()).collection("Journey");
             Journey j = new Journey(time);
+
+            // Add to database to signify start of the journey
             ref.set(j);
             createCameraSource();
             cancel.setClickable(true);
@@ -207,8 +220,9 @@ public class JourneyFunctionality extends AppCompatActivity {
         cancel.setClickable(false);
 
 
-        FusedLocationProviderClient mFusedLocationClient = new FusedLocationProviderClient(JourneyFunctionality.this);
-        if (ContextCompat.checkSelfPermission(JourneyFunctionality.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        // Get Location where journey finished
+        FusedLocationProviderClient mFusedLocationClient = new FusedLocationProviderClient(JourneyFunctionalityActivity.this);
+        if (ContextCompat.checkSelfPermission(JourneyFunctionalityActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult l) {
@@ -225,9 +239,9 @@ public class JourneyFunctionality extends AppCompatActivity {
 
 
             ActivityCompat.requestPermissions
-                    (JourneyFunctionality.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1
+                    (JourneyFunctionalityActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1
                     );
-            Toast.makeText(JourneyFunctionality.this, "Coordinate", Toast.LENGTH_LONG).show();
+            Toast.makeText(JourneyFunctionalityActivity.this, "Coordinate", Toast.LENGTH_LONG).show();
         }
 
         clicked = true;
@@ -257,15 +271,16 @@ public class JourneyFunctionality extends AppCompatActivity {
         long difference = date2.getTime() - date1.getTime();
 
         Log.d(TAG, "EndJourney: " + difference);
-        Intent intent = new Intent(JourneyFunctionality.this, JourneyRecap.class);
+        Intent intent = new Intent(JourneyFunctionalityActivity.this, JourneyRecap.class);
 
 
+        // Send Journey Information to the journey recap activity
         intent.putExtra("Lat", String.valueOf(lat));
         intent.putExtra("Long", String.valueOf(lng));
         intent.putExtra("length", difference);
         intent.putExtra("endLat", String.valueOf(lat1));
         intent.putExtra("endLng", String.valueOf(lng1));
-        intent.putExtra("startTime", infor.get(0).getTime().split(" ")[1]);
+        intent.putExtra("startTime", ref.getId().split(" ")[1]);
         intent.putExtra("endTime", infor.get(infor.size() - 1).getTime().split(" ")[1]);
         intent.putExtra("blinks", String.valueOf(Tblinks));
         intent.putExtra("warnings", String.valueOf(warnings));
@@ -281,7 +296,7 @@ public class JourneyFunctionality extends AppCompatActivity {
         counter++;
         firebaseVisionFace = face;
         Journey journey;
-
+        int recent =0;
 
         String[] t1, t2;
         if (!infor.isEmpty()) {
@@ -317,12 +332,12 @@ public class JourneyFunctionality extends AppCompatActivity {
                 if (face.getLeftEyeOpenProbability() < .2 && face.getLeftEyeOpenProbability() < .2 && face.getLeftEyeOpenProbability() > 0 && face.getLeftEyeOpenProbability() > 0) {
 
                 }
-                JourneyInformation information = new JourneyInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability(), Tblinks);
+                // Create face Object
+                FaceInformation information = new FaceInformation(user.getEmail(), time, face.getLeftEyeOpenProbability(), face.getRightEyeOpenProbability(), Tblinks);
                 infor.add(information);
 
-                journey = new Journey(infor);
 
-                if (infor.size() > 4) {
+                if (infor.size() > 2) {
 
                     if (infor.get(infor.size() - 1).getLeftEye() < .2 && infor.get(infor.size() - 2).getLeftEye() > .2) {
                         blinks++;
@@ -332,19 +347,23 @@ public class JourneyFunctionality extends AppCompatActivity {
 
 
                 Log.d(TAG, "updateFace: " + difference);
+                // check if journey has started
                 if (difference > 0) {
 
                     Log.d(TAG, "updateFace: " + blinks);
 
-                    if ((((double) difference / (double) 10000 % 1) == 0.0) && blinks > 0) {
+                    // Every Time a minute passes add the total blinks for that minute to a hashmap
+                    if ((((double) difference / (double) 60000 % 1) == 0.0) && blinks > 0) {
 
                         mincounter++;
                         timeBlinks.put(mincounter, blinks);
                         Log.d(TAG, "Blinky map: " + timeBlinks);
                         blinks = 0;
-
+                        // no comparing in first minute
                         if (!timeBlinks.isEmpty()) {
                             int currentBlink = timeBlinks.get(timeBlinks.size());
+
+                            // After first minute check if number of blinks in the second minute is more than the first
                             if (timeBlinks.size() == 2) {
                                 if (timeBlinks.get(1) < currentBlink) {
                                     Toast.makeText(this, "More Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
@@ -356,32 +375,36 @@ public class JourneyFunctionality extends AppCompatActivity {
                                 }
                             }
                             if (timeBlinks.size() > 2) {
+                                // Get all previous blink numbers
                                 for (int i : timeBlinks.keySet()) {
-                                    prevBlink += timeBlinks.get(i);
-                                    Log.d(TAG, "prev: " + prevBlink);
-                                Log.d(TAG, "prev: " + timeBlinks.get(i));
-                            }
+                                    recent =  timeBlinks.get(i);
 
-                                int avg = prevBlink / timeBlinks.get(timeBlinks.size()-1);
-                                Log.d(TAG, "prev: " + prevBlink);
-                                Log.d(TAG, "total: " + avg);
-                                Log.d(TAG, "AVERAGE: " + timeBlinks.get(timeBlinks.size()-1));
+//                                    Log.d(TAG, "prev: " + timeBlinks.get(i));
+                                }prevBlink = prevBlink + recent;
+
+
+                                int avg = prevBlink / timeBlinks.size();
+                                Log.d(TAG, "Average: " + avg);
+                                Log.d(TAG, "Size: " +  timeBlinks.size());
+
+                                // if the current number of blinks is greater than the average alert the driver
+
 
                                 if (currentBlink > avg) {
-                                    Toast.makeText(this, "More Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(this, "More Blinks: " + avg + " " + timeBlinks.get(timeBlinks.size() - 1), Toast.LENGTH_SHORT).show();
                                     String toSpeak = "You Are Showing Signs Of Fatigue";
                                     toSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
                                     warnings++;
                                 } else {
-                                    Toast.makeText(this, "Less Blinks: " + timeBlinks.get(1) + " " + timeBlinks.get(2), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(this, "Less Blinks: " + avg + " " + timeBlinks.get(timeBlinks.size() - 1), Toast.LENGTH_SHORT).show();
 
                                 }
                             }
                         }
-
-                        if (warnings > 10){
+                        // if warnings persist send message to emergency contact
+                        if (warnings > 10 && msgSent == false) {
                             sendSMSMessage();
-                            String toSpeak = "Message Sent to Emergency Contact";
+                            String toSpeak = "You have been showing continuous signs of fatigue, Please Consider Resting";
                             toSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
                         }
                     }
@@ -399,12 +422,12 @@ public class JourneyFunctionality extends AppCompatActivity {
                     public void onSuccess(DocumentReference documentReference) {
                         infor.clear();
                         counter = 0;
-                        Toast.makeText(JourneyFunctionality.this, "Added To DB", Toast.LENGTH_SHORT);
+                        Toast.makeText(JourneyFunctionalityActivity.this, "Added To DB", Toast.LENGTH_SHORT);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "FAIIIL: ");
+                        Log.d(TAG, "Failed to write: ");
                     }
                 });
 
@@ -418,7 +441,7 @@ public class JourneyFunctionality extends AppCompatActivity {
 //
 //            }
 
-//            Log.d(TAG, "Size: " + infor.size());
+
         }
 
 
@@ -436,7 +459,7 @@ public class JourneyFunctionality extends AppCompatActivity {
 
                 SmsManager smgr = SmsManager.getDefault();
                 smgr.sendTextMessage(phoneNo, null, message, null, null);
-                Toast.makeText(JourneyFunctionality.this, "SMS Sent Successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(JourneyFunctionalityActivity.this, "SMS Sent Successfully", Toast.LENGTH_SHORT).show();
             }
 
 
@@ -542,7 +565,7 @@ public class JourneyFunctionality extends AppCompatActivity {
     }
 
 
-    public static JourneyFunctionality getInstance() {
+    public static JourneyFunctionalityActivity getInstance() {
         return activityA;
     }
 }

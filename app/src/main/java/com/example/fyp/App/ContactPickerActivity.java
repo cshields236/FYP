@@ -154,7 +154,7 @@ public class ContactPickerActivity extends AppCompatActivity {
                     int nameColumnIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
                     String name = cursor.getString(nameColumnIndex);
 
-                    Log.d("phone number", "Z number : " + number + " , name : " + name);
+
 
                     prefsHelper.setEmergencyContactName(name);
                     prefsHelper.setEmergencyContactNumber(number);
@@ -187,19 +187,6 @@ public class ContactPickerActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * react to the user tapping the back/up icon in the action bar
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     @Override
     public void onBackPressed() {

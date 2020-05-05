@@ -43,6 +43,15 @@
                 android:layout_below="@+id/placeNameTextView"
                 android:text="Place Vicinity"
                 android:textSize="14sp" />
+            <TextView
+                android:id="@+id/placeDistanceTextView"
+                android:layout_width="match_parent"
+                android:layout_toLeftOf="@id/placeRatingTextView"
+                android:layout_marginRight="5dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/placeVicinityTextView"
+                android:text="Place Distance"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/placeRatingTextView"

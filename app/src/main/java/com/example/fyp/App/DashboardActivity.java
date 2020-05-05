@@ -97,7 +97,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     public void launchFaceTrcker(View view) {
-        Intent i = new Intent(this, JourneyFunctionality.class);
+        Intent i = new Intent(this, JourneyFunctionalityActivity.class);
         startActivity(i);
     }
 

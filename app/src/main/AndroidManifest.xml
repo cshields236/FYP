@@ -13,9 +13,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="Stay Awake, Drive Safe"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".App.CoffeeSuggestionsActivity"></activity>
@@ -37,6 +37,8 @@
 
         <activity
             android:name=".App.MapsActivity"
+            android:parentActivityName=".App.DashboardActivity"
+
             android:screenOrientation="portrait" />
         <activity
             android:name=".App.DashboardActivity"
@@ -45,13 +47,17 @@
             android:name=".App.StatsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".App.JourneyFunctionality"
+            android:name=".App.JourneyFunctionalityActivity"
+            android:parentActivityName=".App.DashboardActivity"
+            android:theme="@style/AppTheme.AppBarOverlay"
             android:screenOrientation="portrait" />
         <activity
             android:name=".App.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".App.CameraActivity"
+            android:parentActivityName=".App.DashboardActivity"
+            android:theme="@style/AppTheme.AppBarOverlay"
             android:screenOrientation="portrait" />
         <activity
             android:name=".App.ContactPickerActivity"

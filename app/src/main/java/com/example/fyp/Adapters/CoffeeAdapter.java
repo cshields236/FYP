@@ -27,12 +27,14 @@ public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.MyViewHold
         TextView textViewPlaceName;
         TextView textViewPlaceRating;
         TextView textViewPlaceVicinity;
+        TextView textViewDistance;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             this.textViewPlaceName = itemView.findViewById(R.id.placeNameTextView);
             this.textViewPlaceRating =  itemView.findViewById(R.id.placeRatingTextView);
             this.textViewPlaceVicinity =  itemView.findViewById(R.id.placeVicinityTextView);
+            this.textViewDistance = itemView.findViewById(R.id.placeDistanceTextView);
         }
     }
 
@@ -54,10 +56,12 @@ public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.MyViewHold
         TextView textViewPlaceName = holder.textViewPlaceName;
         TextView textViewPlaceRating = holder.textViewPlaceRating;
         TextView textViewPlaceVicinity = holder.textViewPlaceVicinity;
+        TextView textViewDistance = holder.textViewDistance;
 
         textViewPlaceName.setText(dataSet.get(position).getName());
         textViewPlaceRating.setText(dataSet.get(position).getRating());
         textViewPlaceVicinity.setText(dataSet.get(position).getVicinity());
+        textViewDistance.setText("1.54km from here" );
     }
 
     @Override

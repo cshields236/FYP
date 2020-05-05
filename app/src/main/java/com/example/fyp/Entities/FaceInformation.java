@@ -3,9 +3,7 @@ package com.example.fyp.Entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
-public class JourneyInformation implements Parcelable {
+public class FaceInformation implements Parcelable {
     private String name;
     private String time;
     private double leftEye;
@@ -15,11 +13,11 @@ public class JourneyInformation implements Parcelable {
 
 
 
-    public JourneyInformation() {
+    public FaceInformation() {
     }
 
 
-    public JourneyInformation(String name, String time, double leftEye, double rightEye, int blink) {
+    public FaceInformation(String name, String time, double leftEye, double rightEye, int blink) {
         this.name = name;
         this.time = time;
         this.leftEye = leftEye;
@@ -27,7 +25,7 @@ public class JourneyInformation implements Parcelable {
         this.blink = blink;
     }
 
-    public JourneyInformation(String name, String time, double leftEye, double rightEye) {
+    public FaceInformation(String name, String time, double leftEye, double rightEye) {
 
         this.name = name;
         this.time = time;
@@ -35,22 +33,22 @@ public class JourneyInformation implements Parcelable {
         this.rightEye = rightEye;
     }
 
-    protected JourneyInformation(Parcel in) {
+    protected FaceInformation(Parcel in) {
         name = in.readString();
         time = in.readString();
         leftEye = in.readDouble();
         rightEye = in.readDouble();
     }
 
-    public static final Creator<JourneyInformation> CREATOR = new Creator<JourneyInformation>() {
+    public static final Creator<FaceInformation> CREATOR = new Creator<FaceInformation>() {
         @Override
-        public JourneyInformation createFromParcel(Parcel in) {
-            return new JourneyInformation(in);
+        public FaceInformation createFromParcel(Parcel in) {
+            return new FaceInformation(in);
         }
 
         @Override
-        public JourneyInformation[] newArray(int size) {
-            return new JourneyInformation[size];
+        public FaceInformation[] newArray(int size) {
+            return new FaceInformation[size];
         }
     };
 

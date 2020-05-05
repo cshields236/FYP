@@ -3,12 +3,11 @@ package com.example.fyp.Entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Journey implements Parcelable {
-    private List<JourneyInformation> journeyInformationss = new ArrayList<JourneyInformation>();
+    private List<FaceInformation> faceInformationsses = new ArrayList<FaceInformation>();
     private String time;
     private String id;
 
@@ -18,11 +17,11 @@ public class Journey implements Parcelable {
     }
 
 
-    public Journey(List<JourneyInformation> journeyInformationss) {
-        this.journeyInformationss = journeyInformationss;
+    public Journey(List<FaceInformation> faceInformationsses) {
+        this.faceInformationsses = faceInformationsses;
     }
-    public Journey(List<JourneyInformation> journeyInformationss, String time) {
-        this.journeyInformationss = journeyInformationss;
+    public Journey(List<FaceInformation> faceInformationsses, String time) {
+        this.faceInformationsses = faceInformationsses;
         this.time = time;
     }
 
@@ -32,7 +31,7 @@ public class Journey implements Parcelable {
     }
 
     protected Journey(Parcel in) {
-        journeyInformationss = in.createTypedArrayList(JourneyInformation.CREATOR);
+        faceInformationsses = in.createTypedArrayList(FaceInformation.CREATOR);
         time = in.readString();
         id = in.readString();
     }
@@ -49,18 +48,18 @@ public class Journey implements Parcelable {
         }
     };
 
-    public List<JourneyInformation> getJourneyInformationss() {
-        return journeyInformationss;
+    public List<FaceInformation> getFaceInformationsses() {
+        return faceInformationsses;
     }
 
-    public void setJourneyInformationss(List<JourneyInformation> journeyInformationss) {
-        this.journeyInformationss = journeyInformationss;
+    public void setFaceInformationsses(List<FaceInformation> faceInformationsses) {
+        this.faceInformationsses = faceInformationsses;
     }
 
     @Override
     public String toString() {
         return "Journey{" +
-                "journeyInformationss=" + journeyInformationss +
+                "faceInformationsses=" + faceInformationsses +
                 '}';
     }
 
@@ -87,7 +86,7 @@ public class Journey implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(journeyInformationss);
+        dest.writeTypedList(faceInformationsses);
         dest.writeString(time);
         dest.writeString(id);
     }

@@ -8,14 +8,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
 
+import com.example.fyp.Entities.FaceInformation;
 import com.example.fyp.Entities.Journey;
-import com.example.fyp.Entities.JourneyInformation;
 import com.example.fyp.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -25,8 +24,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -41,7 +38,7 @@ public class PastJourney extends AppCompatActivity implements OnMapReadyCallback
     ArrayList<String> times = new ArrayList<>();
     ArrayList<Integer> blinks = new ArrayList<>();
 
-    private ArrayList<JourneyInformation> journeys = new ArrayList<>();
+    private ArrayList<FaceInformation> journeys = new ArrayList<>();
     private GoogleMap mMap;
 
     @Override
@@ -80,9 +77,9 @@ public class PastJourney extends AppCompatActivity implements OnMapReadyCallback
                     }
                     for (Journey j : js) {
                         times.add(j.getTime().split(" ")[1].split(":")[0] + ":" + j.getTime().split(" ")[1].split(":")[1]);
-                        journeys = (ArrayList<JourneyInformation>) j.getJourneyInformationss();
+                        journeys = (ArrayList<FaceInformation>) j.getFaceInformationsses();
                     }
-                    for (JourneyInformation inf : journeys) {
+                    for (FaceInformation inf : journeys) {
                         blinks.add(inf.getBlink());
                     }
 

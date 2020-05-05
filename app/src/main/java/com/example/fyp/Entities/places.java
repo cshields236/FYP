@@ -10,6 +10,7 @@ public class places {
     private String latitude;
     private String longitude;
     private String vicinity;
+    private String distance;
 
     public places(JsonObject placeJSONObject)
     {
@@ -19,6 +20,7 @@ public class places {
         latitude = placeJSONObject.getAsJsonObject("geometry").getAsJsonObject("location").get("lat").getAsString();
         longitude = placeJSONObject.getAsJsonObject("geometry").getAsJsonObject("location").get("lng").getAsString();
         vicinity = placeJSONObject.get("vicinity").getAsString();
+//        distance = placeJSONObject.get("")
     }
 
     public String getName() {
